@@ -1,0 +1,226 @@
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>修改比赛</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.min.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="/js/date.js"></script>
+    <script type="text/javascript" src="/js/wangEditor.min.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">修改最新竞赛</h2>
+                <div id="add-tab" class="tab-pane active" style="padding: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);background-color: #fff; ">
+                    <span style="font-size: 20px;">版本号：</span>
+                    <input id="version" style="width: 24%;" class="form-control"type="text" name="title" placeholder="如：第三届或2019年">
+                    <br>
+                    <span style="font-size: 20px;">请输入竞赛简介：</span><br>
+                    <!-- 富文本编辑器 -->
+                    <div id="editor"></div>
+                    <!-- --------------------------------------表格-------------------------------------- -->
+                    <div style="margin-top: 30px;width: 100%;" align="center">
+                        <form class="row" style="margin: 20px 50px 0px 50px;text-align: left;font-size: 15px;">
+                            <div class="col-sm-3 col-sm-push-1">
+                                <label for="begin" class="control-label">报名开始时间</label>
+                                <input type="text" class="form-control form_datetime" id="begin" readonly placeholder="请选择日期" style="background-color: #fff;">
+                            </div>
+                            <div class="col-sm-3 col-sm-push-2">
+                                <label for="end" class="control-label">报名截止时间</label>
+                                <input type="text" class="form-control form_datetime" id="end" readonly placeholder="请选择日期" style="background-color: #fff;">
+                            </div>
+                            <div class="col-sm-2 col-sm-push-3">
+                                <label for="attend" class="control-label">参赛方式</label>
+                                <p type="text" id="attend"></p>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- --------------------------------------添加类别-------------------------------------- -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p style="font-size: 30px;margin-top: 10px;margin-bottom: 10px;">添加类别/最多队伍数</p>
+                        </div>
+                        <div class="col-md-4">
+                            <button style="width: 200px;margin-top: 10px;" type="button" id="addcategory" class="btn btn-primary">添加类别</button>
+                        </div>
+                    </div>
+                    <form action="" style="margin: 0px 50px 0px 50px;font-size: 15px;" id="formmember">
+                    </form>
+                    <hr>
+                    <!-- --------------------------------------提交------------------------------------- -->
+                    <div style="display: block;margin: 0 auto;margin-bottom: 20px;margin-top: 20px" align="center">
+                        <button id="submit-one" style="width: 160px;" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript" src="/js/myEditor.js"></script>
+    <script type="text/javascript">
+    var count = -1;
+    var nowone = "1";
+
+    function getid(id) {
+        $("#fmmember" + id).remove();
+        count--;
+    }
+    $(document).ready(function() {
+
+        $.ajax({
+            url: "?info=ones",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                nowone = returndata.data[0].id;
+                $("#name").append("" + returndata.name + "");
+            }
+        })
+
+        // if($("#id")[0]){} else {} 
+        $("#addcategory").click(function() {
+            var ins = '<div class="row" id="fmmember' + ++count + '">' +
+                '<div class="col-md-6">' +
+                '<div class="form-group">' +
+                '<input type="text" class="form-control" style="padding-right: 12px;" id="member' + count + '" placeholder="类别">' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-2">' +
+                '<div class="form-group">' +
+                '<input type="number" class="form-control" style="padding-right: 12px;" id="member_max' + count + '" placeholder="队伍数">' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-4">' +
+                '<button style="width: 100px;" type="button" id="' + count + '" class="btn btn-primary" onclick="return getid(this.id)"">删除该类别</button>' +
+                '</div>'
+            $("#formmember").append(ins)
+        })
+
+        $("#submit-one").click(function() {
+            var members = [];
+            for (var i = 0; i <= count; i++) {
+                if ($('#member' + i).length > 0) {
+                    members.push({ name: $('#member' + i).val(), max: $('#member_max' + i).val() })
+                }
+
+            }
+            for (var i = 0; i < members.length; i++) {
+                if (members[i].name == "") {
+                    ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请填写完整</div>'
+                    $("#alert-div").empty()
+                    $("#alert-div").append(ins)
+                    return;
+                }
+            }
+            if ($("#version").val()=="" || $("#begin").val()=="" || $("#end").val()=="" || editor.txt.html()=="") {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请填写完整</div>'
+                $("#alert-div").empty()
+                $("#alert-div").append(ins)
+                return;
+            }
+            $.ajax({
+                url: "?info=oneedit&oneedit=" + nowone,
+                type: "POST",
+                async: true,
+                data: {
+                    version: $("#version").val(),
+                    begin: $("#begin").data("datetimepicker").getDate().pattern("yyyy-MM-dd"),
+                    end: $("#end").data("datetimepicker").getDate().pattern("yyyy-MM-dd"),
+                    introduction: editor.txt.html(),
+                    category: members
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.reload()
+                        return;
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;">' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+
+        $.ajax({
+            url: "?info=oneedit&oneedit=" + nowone,
+            type: "GET",
+            async: true,
+            success: function(returndata) {console.log(returndata);
+                var ins;
+                $("#version").val(returndata.version)
+                for (var i in returndata.category) {
+                    var ins2 = '<div class="row" id="fmmember' + ++count + '">' +
+                        '<div class="col-md-6">' +
+                        '<div class="form-group">' +
+                        '<input type="text" class="form-control" style="padding-right: 12px;" id="member' + count + '" placeholder="类别" value="' + returndata.category[i].name + '">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="col-md-2">' +
+                        '<div class="form-group">' +
+                        '<input type="number" class="form-control" style="padding-right: 12px;" id="member_max' + count + '" placeholder="队伍数" value="' + returndata.category[i].max + '">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="col-md-4">' +
+                        '<button style="width: 100px;" type="button" id="' + count + '" class="btn btn-primary" onclick="return getid(this.id)"">删除该类别</button>' +
+                        '</div>'
+                    $("#formmember").append(ins2)
+                }
+
+                // ins = returndata.teacher;
+                // $("#teacher").append(ins);
+
+                editor.txt.html(returndata.introduction);
+                $("#begin").datetimepicker("setDate", new Date(returndata.begin));
+                $("#end").datetimepicker("setDate", new Date(returndata.end));
+
+                $(".form_datetime").datetimepicker({
+                    format: "yyyy-mm-dd",
+                    todayBtn: true,
+                    autoclose: true,
+                    language: 'zh-CN',
+                    startView: 2,
+                    minView: 2,
+                });
+                if (returndata.father.attend == "0")
+                    $("#attend").text("单人");
+                else
+                    $("#attend").text("多人");
+            }
+        })
+
+    })
+    </script>
+</body>
+
+</html>

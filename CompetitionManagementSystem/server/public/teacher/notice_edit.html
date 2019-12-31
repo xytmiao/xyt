@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>比赛通知修改</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/wangEditor.min.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">修改比赛通知</h2>
+                <div style="padding: 10px;background-color: #fff;margin-bottom: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                    <div class="row" style="margin-top: 20px;">
+                        <div style="width: 60%;margin:0 auto;">
+                            <span style="font-size: 20px;">请输入通知标题：</span>
+                            <input id="title" style="width: 94%;margin-top: 20px;" class="form-control" type="text" name="title" placeholder="通知标题">
+                            <br>
+                            <span style="font-size: 20px;">请输入通知内容：</span>
+                            <!-- 富文本编辑器 -->
+                            <div id="editor"></div>
+                        </div>
+                        <br>
+                        <div style="width: 60%;margin:0 auto;">
+                            <div class="picDiv">
+                                <div class="addImages">
+                                    <form id="uploadForm" action="" method="post" enctype="multipart/form-data">
+                                        <input type="file" class="file" multiple="multiple">
+                                    </form>
+                                    <button style="width: 200px;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">添加附件</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div style="width: 200px;margin:20px auto;">
+                            <button style="width: 200px;" type="button" id="submit-notice" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript" src="/js/myEditor.js"></script>
+    <script type="text/javascript">
+    var filelists_name = new Array();
+    var filelists = new Array();
+    $(document).ready(function() {
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                var ins;
+                $("#title").val(returndata.title)
+                editor.txt.html(returndata.content);
+                ins = '<br>';
+                for (var i = 0; i < returndata.enclosure.length; i++) {
+                    filelists_name.push(returndata.enclosure[i].substr(26));
+                    var picHtml = "<div class='row imageDiv'  > <div class='col-md-8' id='img" + returndata.enclosure[i].substr(26) + "'  >" + returndata.enclosure[i].substr(26) + "</div> <div class='col-md-1'><button id='" + returndata.enclosure[i].substr(26) + "' style='width: 100px;' class='btn btn-primary delbtn'>删除</button></div></div>"
+                    $(".picDiv").append(picHtml)
+                }
+
+            }
+        })
+    })
+    $(document).ready(function() {
+        // 文件上传
+        $(".file").change(function() {
+            //获取选择文件的对象
+            var docObj = $(this)[0];
+            var picDiv = $(this).parents(".picDiv");
+            //得到所有的文件
+            var fileList = docObj.files;
+            //循环遍历
+            for (var i = 0; i < fileList.length; i++) {
+                filelists.push(fileList[i])
+                filelists_name.push(fileList[i].name)
+                //动态添加html元素
+                var picHtml = "<div class='row imageDiv'  > <div class='col-md-8' id='img" + fileList[i].name + "'  >" + fileList[i].name + "</div> <div class='col-md-1'><button id='" + fileList[i].name + "' style='width: 100px;' class='btn btn-primary delbtn'>删除</button></div></div>"
+                picDiv.append(picHtml);
+            }
+        });
+        /*删除功能*/
+        $(document).on("click", ".delbtn", function() {
+            var _this = $(this);
+            var _id = $(this).attr('id');
+            for (var i = 0; i < filelists.length; i++) {
+                if (filelists[i].name == _id) {
+                    filelists.splice(i, 1);
+                    _this.parents(".imageDiv").remove();
+                }
+
+            }
+            for (var i = 0; i < filelists_name.length; i++) {
+                if (filelists_name[i] == _id) {
+                    filelists_name.splice(i, 1);
+                    _this.parents(".imageDiv").remove();
+                }
+
+            }
+        });
+
+        $("#submit-notice").click(function() {
+            if ($("#title").val() == "" || editor.txt.html() == "") {
+                var ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;">请填写完整！</div>'
+                $("#alert-div").empty()
+                $("#alert-div").append(ins)
+                return;
+            }
+
+            var formData = new FormData()
+            for (var i = 0; i < filelists.length; i++) {
+                formData.append("files", filelists[i]);
+            }
+            for (var i = 0; i < filelists_name.length; i++) {
+                formData.append("enclosure[]", filelists_name[i]);
+            }
+            formData.append('title', $("#title").val());
+            formData.append('content', editor.txt.html());
+            console.log();
+            $.ajax({
+                url: "",
+                type: "POST",
+                async: true,
+                data: formData,
+                // cache: false, 
+                processData: false,
+                contentType: false,
+                success: function(returndata) {
+                    var ins;
+                    console.log(returndata);
+                    if (returndata == "success") {
+                        window.location.reload();
+                        return;
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;">' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+    })
+    </script>
+</body>
+
+</html>

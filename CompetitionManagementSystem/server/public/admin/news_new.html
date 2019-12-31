@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>发布新闻</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/wangEditor.min.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 20px 0px 40px 0px; font-size: 26px;">发布最新新闻</h2>
+                <div style="padding: 10px;background-color: #fff;margin-bottom: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                    <div class="row" style="margin-top: 20px;">
+                        <div style="width: 60%;margin:0 auto;">
+                            <span style="font-size: 20px;">请输入新闻标题：</span>
+                            <input id="title" style="margin-top: 20px;" class="form-control" type="text" name="title" placeholder="新闻标题">
+                            <br>
+                            <span style="font-size: 20px;">请输入新闻内容：</span>
+                            <!-- 富文本编辑器 -->
+                            <div id="editor" style="overflow-x: auto;"></div>
+                        </div>
+                        <br>
+                        <div style="width: 60%;margin:0 auto;">
+                            <div class="picDiv">
+                                <div class="addImages">
+                                    <form id="uploadForm" action="" method="post" enctype="multipart/form-data">
+                                        <input type="file" class="file" multiple="multiple">
+                                    </form>
+                                    <button style="width: 200px;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">添加附件</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div style="width: 200px;margin:20px auto;">
+                            <button style="width: 200px;" type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript" src="/js/myEditor.js"></script>
+    <script type="text/javascript">
+    var filelists = new Array();
+    $(document).ready(function() {
+        // 文件上传
+        $(".file").change(function() {
+            //获取选择文件的对象
+            var docObj = $(this)[0];
+            var picDiv = $(this).parents(".picDiv");
+            //得到所有的文件
+            var fileList = docObj.files;
+            //循环遍历
+            for (var i = 0; i < fileList.length; i++) {
+                filelists.push(fileList[i])
+                //动态添加html元素
+                var picHtml = "<div class='row imageDiv'  > <div class='col-md-8' id='img" + fileList[i].name + "'  >" + fileList[i].name + "</div> <div class='col-md-1'><button id='" + fileList[i].name + "' style='width: 100px;' class='btn btn-primary delbtn'>删除</button></div></div>"
+                picDiv.append(picHtml);
+            }
+        });
+        /*删除功能*/
+        $(document).on("click", ".delbtn", function() {
+            var _this = $(this);
+            var _id = $(this).attr('id');
+            for (var i = 0; i < filelists.length; i++) {
+                if (filelists[i].name == _id) {
+                    filelists.splice(i, 1);
+                }
+                _this.parents(".imageDiv").remove();
+            }
+        });
+        $("#submit").click(function() {
+            $("#alert-div").empty();
+            if (!$("#title").val()) {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请至少输入标题！</div>'
+                $("#alert-div").append(ins);
+                return;
+            }
+            var formData = new FormData()
+            for (var i = 0; i < filelists.length; i++) {
+                formData.append("files", filelists[i]);
+            }
+            formData.append('title', $("#title").val());
+            formData.append('content', editor.txt.html());
+            $.ajax({
+                url: "",
+                type: "POST",
+                async: true,
+                data: formData,
+                // cache: false,
+                processData: false,
+                contentType: false,
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.href = "/admin/news"
+                        return;
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty();
+                        $("#alert-div").append(ins);
+                    }
+                }
+            })
+        })
+    })
+    </script>
+</body>
+
+</html>

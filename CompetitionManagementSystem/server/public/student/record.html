@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer content=webkit>
+    <meta charset="utf-8">
+    <title>项目详情</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/AdminLTE.css">
+    <link href="/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <link href="/css/common.css" type="text/css" rel="stylesheet">
+    <link href="/css/index.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/adminlte.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align: center;font-size: 20px;">
+                    <p>是否取消报名？</p><br>
+                    <button style="width: 100px;" type="button" class="btn btn-default" data-dismiss="modal">否</button>
+                    <button style="width: 100px;" type="button" class="btn btn-primary" id="delete">是</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------主体内容-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">项目详情</h2>
+                <!-- --------------------------------------------------竞赛名称-------------------------------------------------- -->
+                <div style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin-top: 10px;margin-bottom: 20px; background-color: #fff;padding: 10px;">
+                    <div class="row" style="margin: 20px 0px 0px 0px;padding-bottom: 20px;">
+                        <div class="col-md-6" style="text-align: center;margin: 62px 0px 30px 0px;">
+                            <div id="state"></div>
+                            <form action="" style="text-align: left;font-size: 15px;">
+                                <div class="form-group">
+                                    <label for="item">队伍/项目名称</label>
+                                    <input type="text" class="form-control" id="item" placeholder="选填">
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">参赛类别</label>
+                                    <select style="" class="form-control" name="category" id="category">
+                                    </select>
+                                </div>                                
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div id="Leader" class="col-md-10">
+                                            <div class="form-group">
+                                                <label for="leader">指导老师工号/姓名</label>
+                                                <input type="search" autocomplete="off" class="form-control" id="leader0" list="leaderlist0" placeholder="输入工号或姓名">
+                                                <datalist id="leaderlist0" style="display: none;">
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" id="Leader_deal">
+                                            <button style="width: 100px;margin-top: 25px;" type="button" id="addleader" class="btn btn-primary">添加</button>
+                                        </div>
+                                    </div>
+                                    <button style="width: 200px;margin-top: 15px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#MyModal">新建未注册指导老师</button>
+                                </div>                                
+                                <div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">指导老师信息填写</h4>
+                                            </div>
+                                            <!-- 指导老师信息填写 -->
+                                            <div class="modal-body">
+                                                <div id="username_" class="form-group">
+                                                    <label>工号</label>
+                                                    <input type="text" class="form-control" id="username" maxlength="50">
+                                                </div>
+                                                <div id="name_" class="form-group">
+                                                    <label>姓名</label>
+                                                    <input type="text" class="form-control" id="name" maxlength="50">
+                                                </div>
+                                                <div id="gender_" class="form-group">
+                                                    <label>性别</label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="gender" id="gender" value="0" checked>男
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="gender" id="gender" value="1">女
+                                                    </label>
+                                                </div>
+                                                <div id="phone_" class="form-group">
+                                                    <label>手机号</label>
+                                                    <input type="text" class="form-control" id="phone" maxlength="50">
+                                                </div>
+                                                <div id="institute_" class="form-group">
+                                                    <label>学院</label>
+                                                    <input type="text" class="form-control" id="institute" maxlength="50">
+                                                </div>
+                                                <div id="idcard_" class="form-group">
+                                                    <label>身份证</label>
+                                                    <input type="text" class="form-control" id="idcard" maxlength="50">
+                                                </div>
+                                                <div id="email_" class="form-group">
+                                                    <label>邮箱</label>
+                                                    <input type="text" class="form-control" id="email" maxlength="50">
+                                                </div>
+                                                <div id="department_" class="form-group">
+                                                    <label>部门</label>
+                                                    <input type="text" class="form-control" id="department" maxlength="50">
+                                                </div>
+                                                <div id="job_" class="form-group">
+                                                    <label>职称</label>
+                                                    <input type="text" class="form-control" id="job" maxlength="50">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                <button type="button" class="btn btn-primary" id="leader_new">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="recruit_" class="form-group">
+                                    <div style="font-weight: bold;margin: 2px 20px 0px 0px;float: left;">是否需要招募队员</div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="recruit" id="recruit" value="true">是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="recruit" id="recruit" value="false">否
+                                    </label>
+                                </div>
+                                <div id="introduction_" class="form-group">
+                                    <label for="introduction">该项目的基本介绍</label>
+                                    <input type="text" class="form-control" id="introduction" placeholder="若不需招募可不填写(最多50字)" maxlength="50">
+                                </div>
+                                <div id="condition_" class="form-group">
+                                    <label for="introduction">该项目的招募条件</label>
+                                    <input type="text" class="form-control" id="condition" placeholder="若不需招募可不填写(最多30字)" maxlength="30">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6" style="text-align: center;">
+                            <p style="font-size: 25px;margin-top: 20px;margin-bottom: 10px;">添加队员(请填写学号)</p>
+                            <form action="" style="text-align: left;font-size: 15px;" id="formmember">
+                                <div class="form-group" id="fmmember0">
+                                    <label for="member0">队长</label><br>
+                                    <input type="text" class="form-control" style="padding-right: 12px;" id="member0" readonly>
+                                </div>
+                            </form>
+                            <button style="width: 100px;" type="button" id="addmember" class="btn btn-primary">添加队员</button>
+                            <button style="width: 100px;margin-left: 20px;" type="button" id="delmember" class="btn btn-primary">删除队员</button>
+                        </div>
+                    </div>
+                    <!-- 获奖信息显示 -->
+                    <div id="prize" style="margin-left: 10%;margin-bottom: 50px;font-size: 20px;color: #F51818;">
+                        <p>获奖信息：
+                            <span></span></p>
+                        <!-- <p id="prize" style="margin-left: 25px;"></p> -->
+                    </div>
+                    <!-- 负责人回复信息显示 -->
+                    <div style="margin-left: 10%;">
+                        <p>负责人的留言：</p>
+                        <p id="remark" style="margin-left: 25px;"></p>
+                    </div>
+                    <div class="row" style="margin:20px auto;">
+                        <button style="" type="button" id="submit" class="btn btn-primary col-md-2 col-md-push-5 col-xs-5 col-xs-push-2" data-toggle="modal" data-target=".bs-example-modal-sm">确认修改</button>
+                        <button id="predelete" style="width: 100px;" type="button" class="btn btn-primary col-md-2 col-md-push-8 col-xs-3 col-xs-push-3" data-toggle="modal" data-target="#myModal">取消报名</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $("input[type='radio']").on("click", function() {
+        if ($(this).val() == "false") {
+            $("#introduction_").hide();
+            $("#condition_").hide();
+        } else {
+            $("#introduction_").show();
+            $("#condition_").show();
+        }
+    })
+    var recordid;
+    $(document).ready(function() {
+        var membercount = 0;
+        var count1 = 0
+        var leaders = [];
+        var leader_id = [];
+        var exist = false;
+        $.ajax({
+            url: "/leaders",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                for (var i in returndata) {
+                    leaders.push(returndata[i])
+                }
+            }
+        })
+
+        delleader = function (num) {
+            if (num.id == count1) {
+                count1--;
+            }
+            $("#fleader" + num.id).remove();
+            $("#" + num.id).remove();
+        }
+
+        function find(id) {
+            $("#leader" + id).bind('input propertychange', function() {
+                var ins = ''
+                $("#leaderlist" + id).empty()
+                for (var i in leaders) {
+                    if ($("#leader" + id).val() == leaders[i].username.substring(0, $("#leader" + id).val().length) || $("#leader" + id).val() == leaders[i].name.substring(0, $("#leader" + id).val().length)) {
+                        ins += '<option value="' + leaders[i].username + '"><div>' +
+                            '<span>' + leaders[i].name + '</span> &nbsp&nbsp&nbsp' +
+                            '<p>' + leaders[i].institute + '</p>&nbsp&nbsp&nbsp' +
+                            '<p>' + leaders[i].department + '</p>&nbsp&nbsp&nbsp' +
+                            '</div></option > '
+                    }
+                }
+                $("#leaderlist" + id).append(ins);
+            })
+        }
+
+        funchange = function () {
+            var the = $(this)
+            the.parent().removeClass();
+            the.parent().addClass("form-group");
+            $(".form-group span").remove();
+            if (the.val() == "") {
+                exist = false;
+                return;
+            }
+            $.ajax({
+                url: "/exist?id=" + the.val(),
+                type: "GET",
+                async: true,
+                success: function(returndata) {
+                    if (returndata == "1" || returndata == "2") {
+                        the.parent().addClass("has-success has-feedback");
+                        the.parent().append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="margin-top: 5px;margin-right: 10px;"></span>')
+                        exist = true;
+                        
+                    } else {
+                        the.parent().addClass("has-error has-feedback");
+                        the.parent().append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="margin-top: 5px;margin-right: 10px;"></span>')
+                        the.parent().append('<span id="helpBlock2" class="help-block">未注册</span>')
+                        exist = false;
+                        
+                    }
+                }
+            })
+        }
+
+        $("#addmember").click(function() {
+            var ins = '<div class="form-group" id="fmmember' + ++membercount + '">' +
+                '<label>队员' + membercount + '</label><br>' +
+                '<input type="text" class="form-control" style="padding-right: 12px;" id="member' + membercount + '">' +
+                // '<button id="delmember' + membercount + '" type="button" class="close" aria-label="Close" style="float: right;margin-top: 6px;"><div aria-hidden="true">&times;</div></button>' +
+                '</div>'
+            $("#formmember").append(ins)
+            $('input[id^="member' + membercount + '"]').on("change", funchange)
+        })
+
+        $("#addleader").click(function() {
+            if ($("#leader0").val()) {
+                if (exist) {
+                    for (var k = 1; k <= count1; k++) {
+                            if ($("#leader0").val() == $("#leader"+k).val()) {
+                                alert("该指导老师已添加！")
+                                return;
+                            }
+                        
+                    }
+                    var ins = '<div class="form-group"  id="fleader' + ++count1 + '">' +
+                        '<label for="leader">指导老师</label>' +
+                        '<input type="search" autocomplete="off" class="form-control" id="leader' + count1 + '" class="leader" list="leaderlist' + count1 + '" readonly>' +
+                        '<datalist id="leaderlist' + count1 + '" style="display: none;">' +
+                        '</datalist> </div>'
+                    var ins1 = '<button style="width: 100px;margin-top: 40px;" type="button" id="' + count1 + '" class="btn     btn-primary" onclick="delleader(this)">删除</button>'
+                    $("#Leader").append(ins)
+                    $("#Leader_deal").append(ins1)
+                    $('input[id^="leader' + count1 + '"]').on("change", funchange)
+                    $("#leader" + count1).val($("#leader0").val()).change()
+                    $("#leader0").val("")
+                } else alert("该指导老师不存在！")
+            }
+        })
+
+        $("#delmember").click(function() {
+            if (membercount > 0) {
+                $('#fmmember' + membercount).remove();
+                --membercount;
+            }
+        })
+
+        // 提交指导老师信息
+        $("#leader_new").click(function() {
+            if ($("#username").val() == "" || $("#name").val() == "" || $("#phone").val() == "" || $("#institute").val() == "" || $("#idcard").val() == "" || $("#email").val() == "" || $("#department").val() == "" || $("#job").val() == "") {
+                alert("请填写完整！")
+                return;
+            }
+            $.ajax({
+                url: "?info=leader",
+                type: "POST",
+                async: false,
+                data: {
+                    username: $("#username").val(),
+                    name: $("#name").val(),
+                    gender: $("#gender:checked").val(),
+                    phone: $("#phone").val(),
+                    institute: $("#institute").val(),
+                    idcard: $("#idcard").val(),
+                    email: $("#email").val(),
+                    department: $("#department").val(),
+                    job: $("#job").val()
+                },
+                success: function(returndata) {
+                    if (returndata) {
+                        $('#leader'+count1).val($("#username").val());
+                        $('#MyModal').modal('hide');
+                        leaders.push({ username: $("#username").val(), _id: returndata })
+                    } else alert("提交失败！")
+                }
+            })
+        })
+
+        find(0)
+        $('input[id^="leader0"]').on("change", funchange)
+        $("#submit").click(function() {
+            var members = [];
+            for (var i = 0; i <= membercount; i++) {
+                members.push($('#member' + i).val())
+            }
+            for (var i = 0; i < members.length; i++) {
+                if (members[i] == "") {
+                    ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请填写完整</div>'
+                    $("#alert-div").empty()
+                    $("#alert-div").append(ins)
+                    return;
+                }
+            }
+            for (var i = 0; i < members.length; i++) {
+                if ($("#fmmember" + i).hasClass('has-error')) {
+                    ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >有成员还未注册</div>'
+                    $("#alert-div").empty()
+                    $("#alert-div").append(ins)
+                    return;
+                }
+            }
+            for (var i = 0; i < members.length; i++) {
+                for (var j = i + 1; j < members.length; j++) {
+                    if (members[i] == members[j]) {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >成员重复</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                        return;
+                    }
+                }
+            }
+            for (var k = 1; k <= count1; k++) {
+                for (var i in leaders) {
+                    if ($("#leader" + k).val() == leaders[i].username) {
+                        leader_id.push({ _id: leaders[i]._id })
+                    }
+                }
+            }
+            $.ajax({
+                url: "?info=1",
+                type: "POST",
+                async: true,
+                data: {
+                    item: $("#item").val(),
+                    category: $("#category").val(),
+                    leader: leader_id,
+                    recruit: $("#recruit:checked").val(), //增加招募字段
+                    introduction: $("#introduction").val(), //增加介绍字段
+                    condition: $("#condition").val(), //增加招募条件
+                    member: members
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >修改成功</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                        setTimeout(function() {
+                            window.location.reload()
+                        }, 1000);
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+
+        $("#delete").click(function() {
+            $.ajax({
+                url: "/student/record/" + recordid + "/cancel",
+                type: "POST",
+                async: true,
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.href = "/student/record/"
+                        return;
+                    } else {
+                        alert(returndata);
+                    }
+                }
+            })
+        })
+
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                console.log(returndata);
+                if (returndata.prize) {
+                    $("#prize p span").append(returndata.prize);
+                    $("#remark").parent().hide();
+                    $("#predelete").hide();
+                } else {
+                    $("#prize").hide();
+                }
+                if (returndata.category == "无") {
+                    var ins = '<option selected>无</option>';
+                    $("#category").append(ins)
+                } else {
+                    for (var i in returndata.father.category) {
+                        var ins = '<option selected>' + returndata.father.category[i].name + '</option>';
+                        $("#category").append(ins)
+                    }
+                }
+                $(".tab-content").find('h2').text(returndata.father.version + returndata.father.father.name)
+                recordid = returndata.id
+                $("#item").val(returndata.item)
+                $("#category").val(returndata.category)
+                if (returndata.father.father.attend == 1) {
+                    if (returndata.recruit == true)
+                        $("input[type=radio][name=recruit][value=true]").attr("checked", 'checked');
+                    else {
+                        $("input[type=radio][name=recruit][value=false]").attr("checked", 'checked');
+                        $("#introduction_").hide();
+                        $("#condition_").hide();
+                    }
+                    $("#introduction").val(returndata.introduction);
+                    $("#condition").val(returndata.condition);
+                }
+                for (var i in returndata.leader) {
+                    if (i >= 0) {
+                        exist = true;
+                        $("#leader0").val(returndata.leader[i].username).change();
+                        $("#addleader").trigger("click");
+                    }
+                }
+
+                for (var i in returndata.member) {
+                    if (i != 0) {
+                        $("#addmember").trigger("click");
+                    }
+                    $("#member" + i).val(returndata.member[i].username);
+                    returndata.canEdit || $("#member" + i).attr("readonly", "");
+                }
+
+                if (!returndata.remark || returndata.remark == "")
+                    returndata.remark = "暂无留言"
+                $("#remark").text(returndata.remark)
+
+                if (!returndata.canEdit) {
+                    $("#item").attr("readonly", "readonly")
+                    $("#category").attr("readonly", "readonly")
+                    $("#introduction").attr("readonly", "readonly")
+                    $("#condition").attr("readonly", "readonly")
+                    $("#addmember").hide()
+                    $("#delmember").hide()
+                    $("#submit").hide()
+                    $("#predelete").hide()
+                }
+
+                if (returndata.father.father.attend == 0) {
+                    $("#addmember").hide()
+                    $("#delmember").hide()
+                    // $("#leader").attr("readonly", "readonly")
+                    // $("#phone").attr("readonly", "readonly")
+                    $("label[for=member0]").text("参赛人")
+                    $("#recruit_").hide()
+                    $("#introduction_").hide()
+                    $("#condition_").hide()
+                }
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>

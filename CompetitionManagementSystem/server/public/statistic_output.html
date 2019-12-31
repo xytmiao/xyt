@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <meta name=renderer content=webkit>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="/js/jquery.table2excel.min.js"></script>
+    <title>学生信息统计</title>
+    <style>
+        td{vertical-align: middle !important;}
+    </style>
+</head>
+
+<body style="">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 10px 10px 10px;">
+        <button style="width: 150px;" type="button" id="competition-export" class="btn btn-primary col-xs-1">导出</button>
+        <p class="col-xs-push-1 col-xs-1 tips" style="font-size: 22px;">查询中...</p>
+    </div>
+    <div class="row table-responsive" style="margin: 10px 10px 10px 10px;">
+        <table id="competition-table" class="table table-striped table-bordered table-condensed">
+            <tbody id="competition-record" align="center" style="white-space: nowrap;">
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript" src="/js/date.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        //excel设置
+        $("#competition-export").click(function() {
+            $("#competition-table").table2excel({
+                // 不被导出的表格行的CSS class类
+                exclude: ".noExl",
+                // 导出的Excel文档的名称，（没看到作用）
+                name: "Excel Document Name",
+                // Excel文件的名称
+                filename: "统计信息.xlsx"
+            });
+        });
+
+        //查找缩写
+        var abbrinfo;
+        $.ajax({
+            url: "/json/studentinfo.json",
+            async: false,
+            success: function(data) {
+                abbrinfo = data;
+            }
+        });
+
+        function findabbr(inst, major) {
+            for (var m in abbrinfo[inst]) {
+                if (abbrinfo[inst][m][0] == major) {
+                    return abbrinfo[inst][m][1];
+                }
+            }
+            return false;
+        }
+
+        function GetUrlParms() {
+            var args = new Object();
+            var query = location.search.substring(1); //获取查询串   
+            var pairs = query.split("&"); //在逗号处断开   
+            for (var i = 0; i < pairs.length; i++) {
+                var pos = pairs[i].indexOf('='); //查找name=value   
+                if (pos == -1) continue; //如果没有找到就跳过   
+                var argname = pairs[i].substring(0, pos); //提取name   
+                var value = pairs[i].substring(pos + 1); //提取value   
+                args[argname] = unescape(value); //存为属性   
+            }
+            return args;
+        }
+        var args = GetUrlParms();
+        if (args["types"] && args["start"] && args["end"] && args["competition"] && args["method"]) {
+            $("#competition-record").append('<tr id="types">' + args["types"] + '</tr>')
+
+            $.ajax({
+                url: "?info=1",
+                type: "GET",
+                async: true,
+                data: {
+                    start: args["start"],
+                    end: args["end"],
+                    competition: args["competition"],
+                    method: args["method"],
+                },
+                success: function(returndata) {
+                    $(".tips").text("查询成功！")
+                    console.log(returndata);
+                    if (returndata.length == 0) {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >未查询到任何数据，请更改时间段或竞赛</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                        $("#alert-modal").modal('show');
+                        return;
+                    }
+                    var ins;
+                    ins = '<tr id="types">' + $("#types").html() + '</tr>';
+                    $("#competition-record").empty();
+                    $("#competition-record").append(ins);
+                    for (var i = 1; i <= returndata.length; i++) {
+                        ins = '<tr>'
+                        for (var j in returndata[i - 1].member) {
+                            console.log('<td rowspan="' + returndata[i - 1].member.length + '">' + new Date(returndata[i - 1].father.prizeDate).pattern("yyyy-MM-dd") + '</td>');
+                            $("#types td").each(function() {
+                                switch ($(this).text()) {
+                                    case "序号":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + i + '</td>';
+                                        break;
+                                    case "竞赛名称":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].father.version + returndata[i - 1].father.name + '</td>';
+                                        break;
+                                    case "开始报名时间":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + new Date(returndata[i - 1].father.begin).pattern("yyyy-MM-dd") + '</td>';
+                                        break;
+                                    case "获奖时间":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + (returndata[i - 1].father.prizeDate ? new Date(returndata[i - 1].father.prizeDate).pattern("yyyy-MM-dd") : '') + '</td>';
+                                        break;
+                                    case "奖项":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + (returndata[i - 1].prize ? returndata[i - 1].prize : '') + '</td>';
+                                        break;
+                                    case "项目名称":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + (returndata[i - 1].item ? returndata[i - 1].item : '') + '</td>';
+                                        break;
+                                    case "参赛类别":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].category + '</td>';
+                                        break;
+                                    case "指导老师工号":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].username + '</td>';
+                                        break;
+                                    case "指导老师姓名":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].name + '</td>';
+                                        break;
+                                    case "指导老师性别":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + (returndata[i - 1].leader[0].gender ?'女' : '男') + '</td>';
+                                        break;
+                                    case "指导老师手机":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].phone + '</td>';
+                                        break;
+                                    case "指导老师学院":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].institute + '</td>';
+                                        break;
+                                    case "指导老师部门":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].department + '</td>';
+                                        break;
+                                    case "指导老师身份证":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].idcard + '</td>';
+                                        break;
+                                    case "指导老师邮箱":
+                                        if (j == 0) ins += '<td rowspan="' + returndata[i - 1].member.length + '">' + returndata[i - 1].leader[0].email + '</td>';
+                                        break;
+                                    case "姓名":
+                                        ins += '<td>' + returndata[i - 1].member[j].name + '</td>';
+                                        break;
+                                    case "性别":
+                                        ins += '<td>' + (returndata[i - 1].member[j].gender == 0 ? '男' : '女') + '</td>';
+                                        break;
+                                    case "学号":
+                                        ins += '<td>' + returndata[i - 1].member[j].username + '</td>';
+                                        break;
+                                    case "学院":
+                                        ins += '<td>' + returndata[i - 1].member[j].institute + '</td>';
+                                        break;
+                                    case "专业":
+                                        ins += '<td>' + returndata[i - 1].member[j].major + '</td>';
+                                        break;
+                                    case "班级":
+                                        ins += '<td>' + findabbr(returndata[i - 1].member[j].institute, returndata[i - 1].member[j].major) + returndata[i - 1].member[j].class + '</td>';
+                                        break;
+                                    case "年级":
+                                        ins += '<td>' + returndata[i - 1].member[j].grade + '</td>';
+                                        break;
+                                    case "手机":
+                                        ins += '<td>' + returndata[i - 1].member[j].phone + '</td>';
+                                        break;
+                                    case "邮箱":
+                                        ins += '<td>' + returndata[i - 1].member[j].email + '</td>';
+                                        break;
+                                    case "年龄":
+                                        ins += '<td>' + returndata[i - 1].member[j].age + '</td>';
+                                        break;
+                                    case "身份证号":
+                                        ins += '<td>' + returndata[i - 1].member[j].idcard + '</td>';
+                                        break;
+                                }
+                            })
+                            ins += '</tr>'
+                        }
+                        $("#competition-record").append(ins);
+                    }
+                    var flag = true;
+                    $("#types td").each(function() {
+                        if ($(this).text() == "姓名" || $(this).text() == "性别" || $(this).text() == "学号" || $(this).text() == "学院" || $(this).text() == "专业" || $(this).text() == "班级" || $(this).text() == "年级" || $(this).text() == "手机" || $(this).text() == "邮箱" || $(this).text() == "年龄" || $(this).text() == "身份证号") {
+                            flag = false;
+                        }
+                    })
+                    if (flag)
+                        $("#competition-record td").attr("rowspan", "1");
+                }
+            })
+        }
+
+
+
+    });
+    </script>
+</body>
+
+</html>

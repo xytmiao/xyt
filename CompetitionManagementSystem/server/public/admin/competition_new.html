@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>添加竞赛</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">竞赛列表</h2>
+                <!-- -----------------------------------本科生-------------------------------------------------- -->
+                <div style="padding: 5px;background-color: #fff;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin-bottom: 20px;">
+                    <div class="row" style="margin: 20px 0px 20px 0px;">
+                        <!---------------------------------------------------级联框 ------------------------------------------------------------------>
+                        <div class="col-md-6">
+                            <span style="font-size: 30px;">选择竞赛类别</span>
+                            <select style="margin-top: 40px;width: 95%;" class="form-control" name="institute" id="isGraduate">
+                                <option selected>--请选择学历--</option>
+                            </select>
+                            <select style="margin-top: 40px;width: 95%;" class="form-control" name="level" id="level">
+                                <option selected>--请选择等级--</option>
+                            </select>
+                            <select style="margin-top: 40px;width: 95%;" class="form-control" name="class" id="class">
+                                <option selected>--请选择类别--</option>
+                            </select>
+                            <div style="margin: 40px auto;display: inline-block;">
+                                <h3 style="margin-top: 2px; float: left;font-size: 16px; margin-right: 50px;">类型</h3>
+                                <span style="float: left; margin-right : 60px;">
+                            <label class="radio-inline">
+                                <input type="radio" name="attend" id="attend" value="0">单人
+                            </label>
+                        </span>
+                                <span style="float: left; margin-right:  60px;margin-right: 100px;">
+                            <label class="radio-inline">
+                                <input type="radio" name="attend" id="attend" value="1">多人
+                            </label>
+                        </span>
+                            </div>
+                        </div>
+                        <!---------------------------------------------------内容填写 ------------------------------------------------------------------>
+                        <div class="col-md-6">
+                            <span style="font-size: 30px;">填写竞赛内容</span>
+                            <!---------------------------------------------------输入竞赛名称 ------------------------------------------------------------------>
+                            <div style="margin-top: 20px;">
+                                <p style="font-size: 15px;margin-bottom: 10px;">请输入竞赛名称:</p>
+                                <input style="width: 95%;display: inline-block;" type="text" class="form-control" id="name" placeholder="竞赛名称">
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <p style="font-size: 15px;margin-bottom: 10px;">请选择竞赛分类:</p>
+                                <select style="width: 95%;" class="form-control" name="type" id="type">
+                                    <option selected>--请选择分类--</option>
+                                    <option>学科竞赛</option>
+                                    <option>本科生创新活动竞赛</option>
+                                    <option>本科生技能竞赛</option>
+                                    <option>体育竞赛</option>
+                                    <option>文艺竞赛</option>
+                                </select>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <p style="font-size: 20px;margin-bottom: 10px;">请输入该竞赛负责人的账号:</p>
+                                <input style="width: 95%;display: inline-block;" type="" class="form-control" id="teacher" placeholder="请输入账号" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="width: 200px;margin:20px auto;">
+                            <button style="width: 200px;" type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+    </div>
+    </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var level = new Object();
+        var classes = new Object();
+
+        var map = {
+            "本科生": "0",
+            "研究生": "1",
+            "一级": "1",
+            "二级": "2",
+            "三级": "3",
+            "A类": "0",
+            "B类": "1",
+            "C类": "2",
+            "空": "3",
+        }
+
+        $.getJSON("/json/competetion.json", function(data) {
+            level["--请选择学历--"] = ["--请选择等级--"];
+            classes["--请选择等级--"] = ["--请选择类别--"];
+            for (var i in data) {
+                $("#isGraduate").append('<option value="' + i + '">' + i + '</option>')
+                level[i] = ["--请选择等级--"];
+                for (var m in data[i]) {
+                    level[i].push(data[i][m][0]);
+                    classes[data[i][m][0]] = ["--请选择类别--"];
+                    for (var c in data[i][m]) {
+                        if (c != 0)
+                            classes[data[i][m][0]].push(data[i][m][c]) //i,m,c,均为数字下标
+
+                    }
+                }
+            }
+        })
+
+        $("#isGraduate").change(function() {
+            var whichinst = $(this).children('option:selected').val();
+            $("#level").empty();
+            $("#class").empty();
+            for (var i in level[whichinst]) {
+                var option = '<option value="' + level[whichinst][i] + '">' + level[whichinst][i] + '</option>';
+                $("#level").append(option);
+            }
+            $("#class").append('<option value="--请选择等级--">--请选择类别--</option>');
+        })
+        $("#level").change(function() {
+            var whichmajor = $(this).children('option:selected').val();
+            $("#class").empty();
+            for (var i in classes[whichmajor]) {
+                var option = '<option value="' + classes[whichmajor][i] + '">' + classes[whichmajor][i] + '</option>';
+                $("#class").append(option);
+            }
+        })
+
+        $("#submit").click(function() {
+            if (!$("#name").val() || !$("#teacher").val() || !$("#attend:checked").val() || $("#isGraduate").val() == "--请选择学历--" || $("#level").val() == "--请选择等级--" || $("#class").val() == "--请选择类别--" || $("#type").val() == "--请选择分类--") {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请全部填写！</div>'
+                $("#alert-div").empty();
+                $("#alert-div").append(ins);
+                return;
+            }
+
+            $.ajax({
+                url: "",
+                type: "POST",
+                async: true,
+                data: {
+                    name: $("#name").val(),
+                    teacher: $("#teacher").val(),
+                    attend: $("#attend:checked").val(),
+                    isGraduate: map[$("#isGraduate").val()],
+                    level: map[$("#level").val()],
+                    class: map[$("#class").val()],
+                    type: $("#type").val()
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.href = "/admin/competition";
+                        return;
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+    })
+    </script>
+</body>
+
+</html>

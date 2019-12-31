@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>登录</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" media="screen" href="css/particles_style.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+        svg {width: 110px;}
+        rect {height: 44px;}
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+   
+    <div class="content-wrapper" style="margin: 20px auto;width: 300px;position: relative;min-height: 0px;margin-bottom:">
+        <section style="padding-top: 40px;width: 300px;">
+            <div class="" style="margin:0 auto;border: 1px solid #a0b1c4;background-color: #F7F3F3;width: 300px;height: 370px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" id="log-li" class="active" style="width: 30%; text-align: center;"><a href="#log-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">登录</a></li>
+                    <li role="presentation" id="reg-li" style="width: 30%; text-align: center;"><a href="#reg-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">注册</a></li>
+                    <li role="presentation" id="forget-li" style="width: 40%; text-align: center;"><a href="#forget-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">找回密码</a></li>
+                </ul>
+                <div class="tab-content">
+                    <!-- -----------------------------------登录-------------------------------------------------- -->
+                    <div id="log-tab" class="tab-pane active">
+                        <div style="margin: 0 auto;margin-bottom: 10px;margin-top: 30px;width: 200px">
+                            登录之后请尽快完善个人信息
+                        </div>
+                        <!-- ---------------------------------表单-------------------------------------------------- -->
+                        <div style="margin: 0 auto;margin-bottom: 10px;margin-top: 0px;width: 200px">
+                            <div style="margin: 0 auto;" class="form-group">
+                                <input type="text" class="form-control" id="log-username" style="margin: 0px auto;" placeholder="用户名">
+                            </div>
+                        </div>
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                            <div style="margin: 0 auto;" class="form-group">
+                                <input type="password" class="form-control" id="log-password" placeholder="密码" required>
+                            </div>
+                        </div>
+                        <!-- ---------------------------------图片验证码----------------------------------------------- -->
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 40px;width: 200px;height: 10px">
+                            <input type="text" class="form-control" id="log-captcha" style="width: 80px;float: left;margin-top: 5px;" placeholder="验证码" required>
+                            <div id="captcha1" style="width: 110px;float: right;">
+                            </div>
+                        </div>
+                        <div style="margin: 0 auto;margin-bottom: 10px;margin-top: 30px;width: 200px">
+                            还没有账号？<a href="#reg-tab" class="nav-link" data-toggle="tab" onclick="
+                                    $('#log-li').removeClass('active');
+                                    $('#reg-li').addClass('active');
+                                ">立即注册</a>
+                        </div>
+                        <!-- -----------------------------------登录按钮-------------------------------------------------- -->
+                        <div class="btn-group" style="margin-left: 49px;" role="group" aria-label="...">
+                            <button style="width: 200px;" type="button" id="log-submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">登录</button>
+                        </div>
+                    </div>
+                    <!-- -----------------------------------注册-------------------------------------------------- -->
+                    <div id="reg-tab" class="tab-pane">
+                        <div style="margin: 0 auto;margin-bottom: 10px;margin-top: 30px; width: 200px">
+                            <div style="margin: 0 auto;" class="form-group">
+                                <input type="text" class="form-control" id="reg-username" placeholder="用户名（学号）" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                            <div style="margin: 0 auto;" class="form-group">
+                                <input type="password" class="form-control" id="reg-password" placeholder="密码（8-16位）" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                            <div style="margin: 0 auto;" class="form-group">
+                                <input type="password" class="form-control" id="reg-repassword" placeholder="确认密码" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                            <div style="margin: 0 auto;" class="form-group">
+                                <input type="email" class="form-control" id="reg-email" placeholder="邮箱（xxx@email.com）" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+                        <!-- ---------------------------------图片验证码----------------------------------------------- -->
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 50px;width: 200px;height: 10px">
+                            <input type="text" class="form-control" id="reg-captcha" style="width: 80px;float: left;margin-top: 5px;" placeholder="验证码" required>
+                            <div id="captcha2" style="width: 110px;float: right;">
+                            </div>
+                        </div>
+                        <!-- ------------------------------注册按钮-------------------------------------------------- -->
+                        <div class="btn-group" style="margin-left: 49px;" role="group" aria-label="...">
+                            <button style="width: 200px;" type="button" id="reg-submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">注册</button>
+                        </div>
+                    </div>
+                    <!-- -----------------------------------忘记密码-------------------------------------------------- -->
+                    <div id="forget-tab" class="tab-pane">
+                        <!-- ----------------------------------------表单-------------------------------------------------- -->
+                        <div style="margin: 0 auto;margin-bottom: 10px;margin-top: 50px;width: 200px">
+                            <input type="text" class="form-control" id="forget-username" placeholder="用户名">
+                        </div>
+                        <!-- <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                                <input type="text" class="form-control" id="forget-email" placeholder="邮箱" required>
+                            </div> -->
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 35px;width: 200px;height: 10px">
+                            <input type="text" class="form-control" id="forget-code" style="width: 90px;float: left;" placeholder="验证码" required>
+                            <button style="width: 100px;float: right;" type="button" id="forget-send" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">获取验证码</button>
+                        </div>
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                            <input type="password" class="form-control" id="forget-newpassword" placeholder="新密码" required>
+                        </div>
+                        <div style="margin: 0 auto;margin-top: 0px;margin-bottom: 10px;width: 200px;">
+                            <input type="password" class="form-control" id="forget-renewpassword" placeholder="确认新密码" required>
+                        </div>
+                        <!-- ------------------------------------提交按钮-------------------------------------------------- -->
+                        <div class="btn-group" style="margin-left: 49px;" role="group" aria-label="...">
+                            <button style="width: 200px;" type="button" id="forget-submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">找回密码</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+            <!-- </div> -->
+            <!-- </div> -->
+        </section>
+    </div>
+     <div id="particles-js" style="position: absolute;top:0px;min-height: "></div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/particles.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/particles_app.js"></script>
+    <script src="js/stats.js"></script>
+    <script>
+    var count_particles, stats, update;
+    stats = new Stats;
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
+    count_particles = document.querySelector('.js-count-particles');
+    update = function() {
+        stats.begin();
+        stats.end();
+        if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+            count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+        }
+        requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        //按回车触发提交
+        $(document).keydown(function(event) {
+            if (event.which == 13) {
+                if (!$('body').hasClass('modal-open')) {
+                    if ($('#log-li').hasClass('active'))
+                        $("#log-submit").trigger("click");
+                    if ($('#reg-li').hasClass('active'))
+                        $("#reg-submit").trigger("click");
+                    if ($('#forget-li').hasClass('active'))
+                        $("#forget-submit").trigger("click");
+                    $('#alert-modal').each(function() { //防止模态框消失
+                        event.preventDefault();
+                    });
+                } else {
+                    $('#alert-modal').modal('hide')
+                }
+            }
+        });
+        $(window).scroll(function() {
+            //导航栏滚动变形
+            if ($(".navbar").offset().top > 50) {
+                $(".navbar-fixed-top").addClass("top-nav");
+            } else {
+                $(".navbar-fixed-top").removeClass("top-nav");
+            }
+            if ($(window).width() < 768) {
+                //点击导航链接之后，把导航选项折叠起来
+                $(".navbar-collapse a").click(function() {
+                    $(".navbar-collapse").collapse('hide');
+                });
+                //滚动屏幕时，把导航选项折叠起来
+                $(window).scroll(function() {
+                    $(".navbar-collapse").collapse('hide');
+                });
+            }
+        })
+
+        function alertHtml(str) { //警告文本
+            return '<div id="alertText" style="padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + str + '</div>'
+        }
+
+        function getCaptcha() {
+            //图片验证码
+            $.ajax({
+                url: "/captcha",
+                type: "GET",
+                async: true,
+                success: function(returndata) {
+                    $("#captcha1").html(returndata.img)
+                    $("#captcha2").html(returndata.img)
+                }
+            })
+        }
+        getCaptcha();
+        $("#log-li").click(getCaptcha);
+        $("#reg-li").click(getCaptcha);
+        $("#captcha1").click(getCaptcha);
+        $("#captcha2").click(getCaptcha);
+        //登录
+        $("#log-submit").click(function() {
+            $("#alert-div").empty()
+            $.ajax({
+                url: "/login",
+                type: "POST",
+                async: true,
+                data: {
+                    username: $("#log-username").val(),
+                    password: $("#log-password").val(),
+                    captcha: $("#log-captcha").val(),
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.href = "/";
+                        return;
+                    }
+                    $("#log-captcha").val("");
+                    getCaptcha();
+                    ins = alertHtml(returndata);
+                    $("#alert-div").append(ins)
+                }
+            })
+
+        })
+        //注册
+        $("#reg-submit").click(function() {
+            $("#alert-div").empty()
+            $.ajax({
+                url: "/register",
+                type: "POST",
+                async: true,
+                data: {
+                    username: $("#reg-username").val(),
+                    password: $("#reg-password").val(),
+                    repassword: $("#reg-repassword").val(),
+                    email: $("#reg-email").val(),
+                    captcha: $("#reg-captcha").val(),
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        ins = alertHtml("注册成功！");
+                        $("#alert-div").append(ins)
+                        window.setTimeout(function() {
+                            window.location.href = "/student/upinfo";
+                        }, 1000);
+                        return;
+                    }
+                    if (returndata == "验证码错误！") {
+                        $("#reg-captcha").val("");
+                        getCaptcha();
+                    }
+                    ins = alertHtml(returndata);
+                    $("#alert-div").append(ins)
+                }
+            })
+
+        })
+        //获取邮箱验证码
+        $("#forget-send").click(function() {
+            $("#alert-div").empty()
+            $("#alert-div").append(alertHtml("请稍等，勿点击屏幕..."))
+            $.ajax({
+                url: "/gbpassword/first",
+                type: "POST",
+                async: true,
+                data: {
+                    username: $("#forget-username").val(),
+                    email: $("#forget-email").val()
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        returndata = "已发送"
+                    }
+                    $("#alert-div").empty()
+                    ins = alertHtml(returndata);
+                    $("#alert-div").append(ins)
+                }
+            })
+        })
+        //修改密码
+        $("#forget-submit").click(function() {
+            $("#alert-div").empty()
+            $.ajax({
+                url: "/gbpassword/second",
+                type: "POST",
+                async: true,
+                data: {
+                    username: $("#forget-username").val(),
+                    code: $("#forget-code").val(),
+                    newpassword: $("#forget-newpassword").val(),
+                    renewpassword: $("#forget-renewpassword").val(),
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        ins = alertHtml("修改密码成功！");
+                        $("#alert-div").append(ins)
+                        window.setTimeout(function() {
+                            window.location.href = "/login";
+                        }, 1000);
+                    } else {
+                        ins = alertHtml(returndata);
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+
+        })
+
+    })
+    </script>
+</body>
+
+</html>></div>
+
+<!-- scripts -->
+<script src="js/particles.js"></script>
+<script src="js/particles_app.js"></script>
+
+<!-- stats.js -->
+<script src="js/stats.js"></script>
+<script>
+  var count_particles, stats, update;
+  stats = new Stats;
+  stats.setMode(0);
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+  document.body.appendChild(stats.domElement);
+  count_particles = document.querySelector('.js-count-particles');
+  update = function() {
+    stats.begin();
+    stats.end();
+    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+      count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+    }
+    requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+</script>
+
+</body>
+</html>

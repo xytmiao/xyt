@@ -1,0 +1,95 @@
+form {
+    margin: 8px;
+    padding: 8px;
+    border: 1px solid #a8a8a8;
+    background-color: #f0f0f0;
+}
+
+table {
+    border: 0px solid #fff;
+    font-size: medium;
+    font-family: Times New Roman, serif;
+    letter-spacing:2px;
+    margin: 8px;
+    padding: 8px;
+}
+
+table caption {
+    font-size: medium;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    letter-spacing:8px;
+    margin: 8px;
+    padding: 2px;
+}
+
+table th {
+    font-size: small;
+    font-family: Verdana;
+    font-weight: normal;
+    letter-spacing:2px;
+    margin: 8px;
+    padding: 8px;
+    text-align: left;
+}
+
+table td {
+    font-size: small;
+    font-family: Verdana;
+    font-weight: normal;
+    letter-spacing:2px;
+    margin: 8px;
+    padding: 8px;
+    text-align: right;
+}
+
+table td.td-x-small {
+    font-size: x-small;
+    font-family: Verdana;
+    font-weight: normal;
+    letter-spacing:1px;
+    margin: 8px;
+    padding: 8px;
+    color: #808080;
+    text-align: left;
+}
+
+input[type="text"] {
+    width: 128px;
+}
+
+input[type="password"] {
+    width: 128px;
+}
+
+input.inputTxt128 {
+    width: 128px;
+}
+
+input.inputTxt92 {
+    width: 92px;
+}
+
+input.inputTxt64 {
+    width: 64px;
+}
+
+input.inputTxt48 {
+    width: 48px;
+}
+
+input.inputTxt32 {
+    width: 32px;
+}
+
+fieldset {
+    max-width: 256px;
+    height: auto;
+    border: 1px solid #666;
+    font-size: medium;
+    font-family: Times New Roman, serif;
+    letter-spacing:2px;
+    margin: 4px;
+    padding: 4px;
+    text-align: left;
+}

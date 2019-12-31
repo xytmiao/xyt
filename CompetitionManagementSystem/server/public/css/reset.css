@@ -1,0 +1,56 @@
+﻿/*路径导航*/
+ol.breadcrumb a {
+    color: #419ce6;
+}
+
+ol.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/*a*/
+a {
+    color: #000;
+}
+
+a:hover {
+    color: #419ce6;
+    text-decoration: none;
+}
+
+/*ul*/
+ul.uls {
+    list-style: none;
+    padding-left: 0px;
+}
+
+ul.uls li {
+    padding: 5px 0px 5px 0px;
+    border-bottom: solid 1px #dddddd;
+}
+
+ul.uls li .words {
+    line-height: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nav-tabs .active {
+    border-bottom: 2px solid #419ce6 !important;
+}
+
+.nav-tabs .active a {
+    color: #419ce6 !important;
+}
+
+.nav-tabs a:hover {
+    color: #419ce6 !important;
+}
+
+.nav-tabs a {
+    background-color: #fff0 !important;
+    border: 0px solid #ddd !important;
+}
+.form-control[readonly] {
+        background-color: #fff;
+    }

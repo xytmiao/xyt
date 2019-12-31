@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>竞赛列表</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">竞赛列表</h2>
+                <!-- -----------------------------------本科生-------------------------------------------------- -->
+                <!-- <div style="background-color: #fff;"> -->
+                <ul class="nav nav-tabs">
+                    <li role="presentation" id="undergraduate-li" class="active" style="width: 30%; text-align: center;"><a href="#undergraduate-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">本科生</a></li>
+                    <li role="presentation" id="graduate-li" style="width: 30%; text-align: center;"><a href="#graduate-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">研究生</a></li>
+                </ul>
+                <div id="undergraduate-tab" class="tab-pane active">
+                    <div class="table-responsive" style="overflow-x: auto; text-align: left;margin-top: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);background-color: #fff;padding-left: 20px;margin-bottom: 20px;">
+                        <table id="grad" class="table table-hover" style="font-size: 18px;">
+                            <tr style="border-top: hidden;">
+                                <td>序号</td>
+                                <td>竞赛名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>报名日期</td>
+                                <td>形式</td>
+                                <td>认定级别</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- -----------------------------------研究生-------------------------------------------------- -->
+                <div id="graduate-tab" class="tab-pane">
+                    <div class="table-responsive" style="text-align: left;margin-top: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);background-color: #fff;padding-left: 20px;margin-bottom: 20px;">
+                        <table id="ungrad" class="table table-hover" style="font-size: 18px;">
+                            <tr style="border-top: hidden;">
+                                <td>序号</td>
+                                <td>竞赛名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>报名日期</td>
+                                <td>形式</td>
+                                <td>认定级别</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        //竞赛列表
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+
+                var ins;
+                var ungradnum = 0;
+                var gradnum = 0;
+                for (i in returndata) {
+                    console.log(returndata[i]);
+                    var isGraduate = returndata[i].isGraduate;
+                    var level = returndata[i].level;
+                    var abcclass = returndata[i].class;
+                    var attend = returndata[i].attend;
+                    //ins
+                    ins = '<tr>'
+                    if (isGraduate == true) {
+                        ins += '<td>' + ++ungradnum + '</td>'
+                    } else if (isGraduate == false) {
+                        ins += '<td>' + ++gradnum + '</td>'
+                    }
+
+                    ins += '<td><a href="/competition/' + returndata[i]._id + '">' + returndata[i].name + '</a></td>';
+                    ins += '<td>' + (returndata[i].latest ? returndata[i].latest.begin + '~' + returndata[i].latest.end : '暂未发布') + '</td>';
+                    ins += '<td>' + ['单', '多'][attend] + '人</td>'
+
+                    if (level == "1") {
+                        if (abcclass == "0") {
+                            ins += '<td>一级A类</td>'
+                        } else if (abcclass == "1") {
+                            ins += '<td>一级B类</td>'
+                        } else if (abcclass == "2") {
+                            ins += '<td>一级C类</td>'
+                        }
+                    } else if (level == "2") {
+                        ins += '<td>二级竞赛</td>'
+                    } else if (level == "3") {
+                        ins += '<td>三级竞赛</td>'
+                    }
+
+                    ins += '</tr>'
+                    //append
+                    if (isGraduate == false) { //本科生
+                        $("#grad").append(ins)
+                    } else { //研究生
+                        $("#ungrad").append(ins)
+                    }
+                }
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>

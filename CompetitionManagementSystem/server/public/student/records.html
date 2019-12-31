@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>我的竞赛</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/AdminLTE.css">
+    <link href="/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <link href="/css/common.css" type="text/css" rel="stylesheet">
+    <link href="/css/index.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/adminlte.js"></script>
+    <style>
+        @media (max-width: 768px){
+            .logo-lg img{
+                max-width: 140px !important;margin-top: 10px !important;
+            }
+            .sidebar-toggle{
+                padding-left: 40px !important;padding-top: 10px !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align: center;font-size: 20px;">
+                    <p>是否取消报名？</p><br>
+                    <button style="width: 100px;" type="button" class="btn btn-default" data-dismiss="modal">否</button>
+                    <button style="width: 100px;" type="button" class="btn btn-primary" id="delete">是</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">我的竞赛</h2>
+                <!-- --------------------------------------------------竞赛记录-------------------------------------------------- -->
+                <div class="content" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);font-size: 18px;line-height: 24px;color: #737373;padding: 20px 50px;margin: 20px 20px 0px 20px;background-color: #fff;min-height: 0px;">
+                    <ul id="joins" class="uls">
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var urlDelete = "";
+
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (returndata.length == 0) {
+                    $("#joins").append('<p>暂未参加任何竞赛!</p>')
+                } else {
+                    var ins;
+                    for (i in returndata) {
+                        if (returndata[i].status == 0)
+                            returndata[i].status = '未审核'
+                        else if (returndata[i].status == 1)
+                            returndata[i].status = '已通过'
+                        else if (returndata[i].status == 2)
+                            returndata[i].status = '未通过'
+                        ins = '<li class="row">' +
+                            '<a class="col-md-6 col-xs-12" href="/student/record/' + returndata[i].id + '" style="display: block;line-height: 16px;position: relative;margin-top:4px; ">' +
+                            '<div style="line-height: 30px;">' + returndata[i].father.version + returndata[i].father.name + '</div>' +
+                            '</a>' +
+                            '<p class="col-md-3 col-xs-12" style="padding-left:5px;padding-top:6px;">截止日期:' + returndata[i].father.end + '</p>' +
+                            '<p class="col-md-1 col-xs-4" style="padding-left:5px;padding-right:6px;padding-top:5px;font-size: 16px;">' + returndata[i].status + '</p>' +
+                            '<button class="col-md-1 col-md-push-1 col-xs-4 col-xs-push-4 btDelete btn btn-primary btn-lg" style="font-size: 13px;padding:6px 1px;margin-top:3px;" type="button" data-toggle="modal" data-target="#myModal">取消报名</button>' +
+                            '</li>'
+                        $("#joins").append(ins)
+
+                        if (!returndata[i].canEdit) {
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().next().attr("disabled", "disabled")
+                        }
+                        if (returndata[i].prize) {
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().next().attr("disabled", "disabled")
+                        }
+
+                        if (returndata[i].status == "未审核")
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().css("color", "#EC971F")
+                        else if (returndata[i].status == "未通过")
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().css("color", "#c9302c")
+                        else if (returndata[i].status == "已通过")
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().css("color", "#449D44")
+                        else if (returndata[i].status == "已取消") {
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().css("color", "#6c757d")
+                            $('a[href="/student/record/' + returndata[i].id + '"]').next().next().next().attr("disabled", "disabled")
+                        }
+                    }
+                }
+            }
+        })
+
+        $(".btDelete").click(function() {
+            urlDelete = $(this).prev().prev().prev().attr('href') + "/cancel";
+        })
+
+        $("#delete").click(function() {
+            $.ajax({
+                url: urlDelete,
+                type: "POST",
+                async: true,
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.reload()
+                        return;
+                    }
+                }
+            })
+        })
+
+
+    })
+    </script>
+</body>
+
+</html>

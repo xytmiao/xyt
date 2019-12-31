@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>各届比赛</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 id="competitionname" style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;"></h2>
+                <ul class="nav nav-tabs" style="text-align: left;line-height: 40px;border-bottom: 1px solid #E0E1E2;font-size: 16px;">
+                    <li role="presentation" id="check-li" class="active"><a href="#check-tab" class="nav-link" data-toggle="tab">查看竞赛</a></li>
+                    <li role="presentation" id="notice-li"><a href="?action=notice" class="nav-link">查看通知</a></li>                   
+                    <li role="presentation" id="record-li"><a href="?action=record" class="nav-link">处理报名</a></li>
+                    <li role="presentation" id="prize-li"><a href="?action=prize" class="nav-link">获奖情况</a></li>
+                </ul>
+                <div id="check-tab" class="tab-pane active" style="padding: 20px;">
+                    <span>
+                        <a href="?action=onenew"><button style="width: 200px;margin-right: 20px;margin-top: 10px;" class="btn btn-primary">点击发布新一届竞赛</button></a>
+                    </span>
+                    <span id="oneedit">
+                        <a href="?action=oneedit"><button style="width: 200px;margin-top: 10px;" class="btn btn-primary">点击修改最新一届竞赛</button></a>
+                    </span>
+                    <div class="table-responsive" style="text-align: left;margin-top: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                        <table id="onecompetition" class="table table-hover" style="font-size: 18px;margin-bottom: 0px;">
+                            <tr>
+                                <td>历届竞赛</td>
+                                <td>发布时间</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $.ajax({
+            url: "?info=ones",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                var ins;
+                $("#competitionname").text(returndata.name)
+                if (!returndata.data[0]) {
+                    $("#oneedit").detach();
+                }
+                for (i in returndata.data) {
+                    ins = '<tr>' +
+                        '<td>' + returndata.data[i].version + '</td>' +
+                        '<td>' + returndata.data[i].date + '</td>' +
+                        '<tr>'
+                    $("#onecompetition").append(ins)
+                }
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>

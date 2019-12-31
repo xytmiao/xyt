@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>负责人列表</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+        hr {
+            margin: 10px 0px;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------删除提示栏-------------------------------------------------- -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align: center;font-size: 20px;">
+                    <p>是否重置？</p><br>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+                    <button type="button" class="btn btn-primary" id="delete">是</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">负责人列表</h2>
+                <!-- -----------------------------------本科生-------------------------------------------------- -->
+                <div style="font-size: 18px;background-color: #fff;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin-bottom: 20px;">
+                    <div style="display:inline-block;padding-left: 20px;">
+                        <a style="float: left; display: inline-block;margin-top: 20px;" href="/admin/teacher/new">
+                    <button style="width: 150px;" id="submit" class="btn btn-primary">点击新建负责人</button>
+                </a>
+                    </div>
+                    <hr style="margin:10px;">
+                    <div id="teacher" style="">
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var urlDelete;
+
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+
+                var ins = '';
+                for (var i in returndata) {
+                    ins += '<div class="row" style="margin:0px 10px;">' +
+                        '<div class="col-md-10">' +
+                        '<span>' + returndata[i] + '</span>' +
+                        '</div><div class="col-md-2">' +
+                        '<a  href="/admin/teacher/' + returndata[i] + '">' + '</a>' +
+                        '<button style="width: 100px;" type="button" class="btDelete col-md-1 btn btn-primary" data-toggle="modal" data-target="#myModal">重置密码</button>' +
+                        '</div></div><hr>'
+                }
+                $("#teacher").append(ins);
+            }
+        })
+
+        $(".btDelete").click(function() {
+            urlDelete = $(this).prev().attr('href') + "/reset";
+        })
+
+        $("#delete").click(function() {
+            $.ajax({
+                url: urlDelete,
+                type: "POST",
+                async: true,
+                success: function(returndata) {
+                    if (returndata == "success") {
+                        window.location.href = '/admin/teacher'
+                        return;
+                    }
+                }
+            })
+        })
+
+    })
+    </script>
+</body>
+
+</html>

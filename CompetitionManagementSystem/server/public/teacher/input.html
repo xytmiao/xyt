@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer content=webkit>
+    <meta charset="utf-8">
+    <title>信息导入</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/handsontable-pro@6.2.2/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
+    <script src="https://cdn.jsdelivr.net/npm/handsontable-pro@6.2.2/dist/handsontable.full.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/xlsx.core.min.js"></script>
+</head>
+
+<body>
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div id="container-fluid">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">导入学生信息</h2>
+                <div class="content" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin:20px; background-color: #FFFFFF; font-size: 18px;padding: 20px 50px;min-height: 0px;">
+                    <div class="row">
+                        <div class="col-md-5"><input id="input-student" type="file" accept="application/xlsx"></div>
+                        <div class="col-md-4"><a style="text-decoration: underline;" href="/enclosure/学生信息模板.xlsx">学生信息模板下载</a></div>
+                    </div>
+                    <!-- 在线编辑器 -->
+                    <div id="example1"></div>
+                    <button id="submit-student" type="submit" class="btn btn-primary" style="margin-top: 20px;" disabled>提交</button>
+                </div>
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">导入报名/获奖信息</h2>
+                <div class="content" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin:20px; background-color: #FFFFFF; font-size: 18px;padding: 20px 50px;min-height: 0px;">
+                    <div class="row">
+                        <div class="col-md-5"><input id="input-record" type="file" accept="application/xlsx"></div>
+                        <div class="col-md-4"><a style="text-decoration: underline;" href="/enclosure/报名获奖信息模板.xlsx">报名获奖信息模板下载</a></div>
+                    </div>
+                    <div id="example2"></div>
+                    <button id="submit-record" type="submit" class="btn btn-primary" style="margin-top: 20px;" disabled>提交</button>
+                </div>
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">导入指导老师信息</h2>
+                <div class="content" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin:20px; background-color: #FFFFFF; font-size: 18px;padding: 20px 50px;min-height: 0px;">
+                    <div class="row">
+                        <div class="col-md-5"><input id="input-leaders" type="file" accept="application/xlsx"></div>
+                        <div class="col-md-4"><a style="text-decoration: underline;" href="/enclosure/指导老师信息模板.xlsx">指导老师信息模板下载</a></div>
+                    </div>
+                    <div id="example3"></div>
+                    <button id="submit-leaders" type="submit" class="btn btn-primary" style="margin-top: 20px;" disabled>提交</button>
+                    <!-- 仅仅提交一条指导老师数据 -->
+                    <!-- <div>
+                    <form action="?info=leader" method="post">
+
+                        <button type="submit">提交指导老师</button>
+                    </form>
+                </div> -->
+                </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    // 获取学院专业json，查找缩写
+    var abbrinfo;
+    $.ajax({
+        url: "/json/studentinfo.json",
+        async: false,
+        success: function(data) {
+            abbrinfo = data;
+        }
+    });
+
+    function findabbr(inst, major) {
+        for (var m in abbrinfo[inst]) {
+            if (abbrinfo[inst][m][0] == major) {
+                return abbrinfo[inst][m][1];
+            }
+        }
+        return false;
+    }
+    // 检查学生信息格式
+    function checkrecords(persons) {
+        var stateRecord = true;
+        for (var i = 0; i < persons.length; i++) {
+            if (!persons[i]["学号"] || persons[i]["学号"] == "") { //必须有学号
+                $('#example1 table').find("tr").eq(i + 1).find("td").eq(3).css({
+                    "background": "#FF0000"
+                })
+                stateRecord = false;
+            }
+            if (persons[i]["学院"] && persons[i]["学院"] != "") { //有学院字段
+                if (!abbrinfo[persons[i]["学院"]]) { //如果学院格式错误
+                    $('#example1 table').find("tr").eq(i + 1).find("td").eq(5).css({
+                        "background": "#FF0000"
+                    });
+                    stateRecord = false;
+                }
+            }
+            if (persons[i]["专业"] && persons[i]["专业"] != "") { //有专业字段
+                if (!persons[i]["学院"] || persons[i]["学院"] == "") { //必须有学院才能判断专业
+                    $('#example1 table').find("tr").eq(i + 1).find("td").eq(6).css({
+                        "background": "#FF0000"
+                    })
+                    stateRecord = false;
+
+                } else {
+                    if (!findabbr(persons[i]["学院"], persons[i]["专业"])) { //如果专业格式错误
+
+                        $('#example1 table').find("tr").eq(i + 1).find("td").eq(6).css({
+                            "background": "#FF0000"
+                        })
+                        stateRecord = false;
+
+                    }
+                }
+            }
+            if (persons[i]["班级"]) { //有班级字段
+                persons[i]["班级"] = persons[i]["班级"].replace(/[^0-9]/g, ""); //只保留数字
+            }
+        }
+        if (stateRecord) {
+            $("#submit-student").removeAttr('disabled')
+        } else
+            $("#submit-student").attr("disabled", "disabled")
+        return stateRecord;
+    }
+
+    function checkprize(persons) {
+        var statePrize = true;
+        for (var i in persons) {
+            if (!persons[i]["学号"] || persons[i]["学号"] == "") { //必须有学号
+                $('#example2 table').find("tr").eq(i + 1).find("td").eq(2).css({
+                    "background": "#FF0000"
+                })
+                statePrize = false;
+
+            }
+            if (!persons[i]["比赛名"] || persons[i]["比赛名"] == "") { //必须有比赛名
+                $('#example2 table').find("tr").eq(i + 1).find("td").eq(0).css({
+                    "background": "#FF0000"
+                })
+                statePrize = false;
+
+            }
+            if (!persons[i]["版本"] || persons[i]["版本"] == "") { //必须有版本
+                $('#example2 table').find("tr").eq(i + 1).find("td").eq(1).css({
+                    "background": "#FF0000"
+                })
+                statePrize = false;
+
+            }
+            if (!persons[i]["队长"] || persons[i]["队长"] == "") { //必须有队长
+                $('#example2 table').find("tr").eq(i + 1).find("td").eq(4).css({
+                    "background": "#FF0000"
+                })
+                statePrize = false;
+            }
+        }
+        if (statePrize) {
+            $("#submit-record").removeAttr('disabled')
+        } else
+            $("#submit-record").attr("disabled", "disabled")
+        return statePrize;
+    }
+
+    // 检查指导老师信息格式
+    function checkleaders(persons) {
+        var stateLeaders = true;
+        for (var i = 0; i < persons.length; i++) {
+            if (!persons[i]["工号"] || persons[i]["工号"] == "") { //必须有工号
+                $('#example1 table').find("tr").eq(i + 1).find("td").eq(3).css({
+                    "background": "#FF0000"
+                })
+                stateLeaders = false;
+            }
+            if (persons[i]["学院"] && persons[i]["学院"] != "") { //有学院字段
+                if (!abbrinfo[persons[i]["学院"]]) { //如果学院格式错误
+                    $('#example1 table').find("tr").eq(i + 1).find("td").eq(5).css({
+                        "background": "#FF0000"
+                    });
+                    stateLeaders = false;
+                }
+            }
+        }
+        if (stateLeaders) {
+            $("#submit-leaders").removeAttr('disabled')
+        } else
+            $("#submit-leaders").attr("disabled", "disabled")
+        return stateLeaders;
+    }
+
+    // 保存修改后的数据为json形式
+    function savedata(choice) {
+
+        var att = {}; //创建一个空的json
+        var Array = []; //一个空的数组
+        var id, name, gender, username, phone, institute, major, class_, email, idcard;
+        var competition, version, username, category, captain, prize, leader, remark;
+        $('#example' + choice + ' tbody:first tr').each(function() { //遍历每一个tr
+            var st = []; //空数组，用于存放每一个tr里td的值
+            var chil = $(this).children('td');
+            var tdcount = chil.length;
+            var txt;
+            for (var k = 0; k < tdcount; k++) { //循环得到td的内容值
+                txt = chil.eq(k).text();
+                st.push(txt);
+            }
+            if (choice == 1) {
+                id = st[0]
+                name = st[1]
+                gender = st[2]
+                username = st[3]
+                phone = st[4]
+                institute = st[5]
+                major = st[6]
+                class_ = st[7]
+                email = st[8]
+                idcard = st[9]
+
+                att = {
+                    '序号': id,
+                    '姓名': name,
+                    '性别': gender,
+                    '学号': username,
+                    '手机': phone,
+                    '学院': institute,
+                    '专业': major,
+                    '班级': class_,
+                    '邮箱': email,
+                    '身份证号': idcard
+                };
+            } else {
+                competition = st[0];
+                version = st[1];
+                username = st[2];
+                category = st[3];
+                captain = st[4];
+                prize = st[5];
+                leader = st[6];
+                remark = st[7];
+
+                att = {
+                    '比赛名': competition,
+                    '版本': version,
+                    '学号': username,
+                    '组别类型': category,
+                    '队长': captain,
+                    '奖项': prize,
+                    '指导老师': leader,
+                    '备注': remark
+                };
+            } //把每一个tr的数据写成一个json数据
+            Array.push(att); //把json数据写入数组
+        })
+        console.log(Array);
+        return Array;
+    }
+
+    $(document).ready(function() {
+        var stateRecord = false;
+        var statePrize = false;
+        var stateLeaders = false;
+        var personRecord;
+        var personPrize;
+        var personLeaders;
+        $("#input-student").change(function(e) {
+            var the = $(this);
+            // the.parent().parent().next().attr("disabled", "disabled")
+            the.prev().remove();
+            var files = e.target.files;
+            var fileReader = new FileReader();
+            fileReader.onload = function(ev) {
+                stateRecord = true;
+                try {
+                    var data = ev.target.result,
+                        workbook = XLSX.read(data, {
+                            type: 'binary'
+                        }), // 以二进制流方式读取得到整份excel表格对象
+                        persons = []; // 存储获取到的数据
+                } catch (e) {
+                    the.prev().remove()
+                    the.before('<div class="alert alert-danger" role="alert">文件类型不正确</div>')
+                    stateRecord = false;
+                    return;
+                }
+                // 表格的表格范围，可用于判断表头是否数量是否正确
+                var fromTo = '';
+                // 遍历每张表读取
+                for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo); // 有效单元格
+                        persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                        break; // 如果只取第一张表，就取消注释这行
+                    }
+                }
+                // 改变文件更新表格
+                $('#example1').empty()
+                var container = document.getElementById('example1');
+                var hot = new Handsontable(container, {
+                    data: persons,
+                    rowHeaders: true,
+                    colHeaders: ['序号', '姓名', '性别', '学号', '手机', '学院', '专业', '班级', '邮箱', '身份证号'],
+                    filters: true,
+                });
+                $('#hot-display-license-info').remove() //去掉广告（handsontable）
+
+                //检查格式
+                // stateRecord = checkrecords(persons)
+                if (stateRecord) {
+                    personRecord = persons
+                    $("#submit-student").removeAttr('disabled')
+                } else
+                    $("#submit-student").attr("disabled", "disabled")
+
+                // hot.addHook('afterChange', function(changeData, source) {
+                //     // changeData 是一个数组，第一个元素(数组)，记录所有修改信息
+                //     if (!changeData) return;
+                //     var change = changeData[0],
+                //         row = change[0],
+                //         colProp = change[1],
+                //         preData = change[2],
+                //         newData = change[3];
+                //     persons = savedata(1)
+                //     stateRecord = checkrecords(persons)
+                //     if (stateRecord) {
+                //         personRecord = persons
+                //         console.log(personRecord);
+                //     }
+                // })
+            };
+            // 以二进制方式打开文件
+            fileReader.readAsBinaryString(files[0]);
+        })
+
+        $("#submit-student").click(function() {
+
+            $("#alert-div").empty()
+            if (stateRecord) {
+                personRecord = personRecord.map(s => {
+                    return {
+                        "name": s["姓名"],
+                        "gender": s["性别"] == "男" ? 0 : 1,
+                        "username": s["学号"],
+                        "phone": s["手机"],
+                        "institute": s["学院"],
+                        "major": s["专业"],
+                        "class": parseInt(s["班级"].replace(/[^0-9]/ig, "")),
+                        "email": s["邮箱"],
+                        "idcard": s["身份证号"],
+                    }
+                })
+                $.ajax({
+                    url: "?info=student",
+                    type: "POST",
+                    async: true,
+                    data: { data: JSON.stringify(personRecord) },
+                    success: function(returndata) {
+                        var ins;
+                        if (returndata == "success") {
+                            alert("成功");
+                            ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >修改成功</div>'
+                            $("#alert-div").append(ins)
+                            window.location.reload();
+                            return;
+                        } else {
+                            ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                            $("#alert-div").append(ins)
+                        }
+                    }
+                })
+            }
+        })
+        $("#input-record").change(function(e) {
+            var the = $(this);
+            the.prev().remove()
+            statePrize = true;
+            var files = e.target.files;
+            var fileReader = new FileReader();
+            fileReader.onload = function(ev) {
+                try {
+                    var data = ev.target.result,
+                        workbook = XLSX.read(data, {
+                            type: 'binary'
+                        }), // 以二进制流方式读取得到整份excel表格对象
+                        persons = []; // 存储获取到的数据
+                } catch (e) {
+                    the.prev().remove()
+                    the.before('<div class="alert alert-danger" role="alert">文件类型不正确</div>')
+                    statePrize = false;
+                    return;
+                }
+                // 表格的表格范围，可用于判断表头是否数量是否正确
+                var fromTo = '';
+                // 遍历每张表读取
+                for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo); // 有效单元格
+                        persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                        break; // 如果只取第一张表，就取消注释这行
+                    }
+                }
+                $('#example2').empty();
+                var container = document.getElementById('example2');
+                var hot = new Handsontable(container, {
+                    data: persons,
+                    rowHeaders: true,
+                    colHeaders: ['比赛名', '版本', '学号', '组别类型', '队长', '奖项', '指导老师', '备注'],
+                    filters: true,
+                });
+                $('#hot-display-license-info').remove() //去掉广告（handsontable）
+
+                //检查格式
+                // statePrize = checkprize(persons)
+                if (statePrize) {
+                    personPrize = persons
+                    $("#submit-record").removeAttr('disabled')
+                } else
+                    $("#submit-record").attr("disabled", "disabled")
+
+
+                // hot.addHook('afterChange', function(changeData, source) {
+                //     // changeData 是一个数组，第一个元素(数组)，记录所有修改信息
+                //     if (!changeData) return;
+                //     var change = changeData[0],
+                //         row = change[0],
+                //         colProp = change[1],
+                //         preData = change[2],
+                //         newData = change[3];
+                //     persons = savedata(2)
+                //     statePrize = checkprize(persons)
+                //     if (statePrize) {
+                //         personPrize = persons
+                //     }
+                // })
+
+
+            };
+            // 以二进制方式打开文件
+            fileReader.readAsBinaryString(files[0]);
+        })
+
+        $("#submit-record").click(function() {
+            $("#alert-div").empty()
+            if (statePrize) {
+                personPrize = personPrize.map(r => {
+                    return {
+                        "name": r["比赛名"],
+                        "member": [{ "username": r["学号"] }],
+                        "category": r["组别类型"],
+                        "prize": r["奖项"],
+                        "leader": { "name": r["指导老师"] },
+                    }
+                })
+                $.ajax({
+                    url: "?info=record",
+                    type: "POST",
+                    async: true,
+                    data: { data: JSON.stringify(personPrize) },
+                    success: function(returndata) {
+                        var ins;
+                        if (returndata == "success") {
+                            alert("成功");
+                            ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >修改成功</div>'
+                            $("#alert-div").append(ins)
+                            window.location.reload();
+                            return;
+                        } else {
+                            ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                            $("#alert-div").append(ins)
+                        }
+
+                    }
+                })
+            }
+        })
+
+        $("#input-leaders").change(function(e) {
+            var the = $(this);
+            // the.parent().parent().next().attr("disabled", "disabled")
+            the.prev().remove();
+            stateLeaders = true;
+            var files = e.target.files;
+            var fileReader = new FileReader();
+            fileReader.onload = function(ev) {
+                try {
+                    var data = ev.target.result,
+                        workbook = XLSX.read(data, {
+                            type: 'binary'
+                        }), // 以二进制流方式读取得到整份excel表格对象
+                        persons = []; // 存储获取到的数据
+                } catch (e) {
+                    the.prev().remove()
+                    the.before('<div class="alert alert-danger" role="alert">文件类型不正确</div>')
+                    stateLeaders = false;
+                    return;
+                }
+                // 表格的表格范围，可用于判断表头是否数量是否正确
+                var fromTo = '';
+                // 遍历每张表读取
+                for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo); // 有效单元格
+                        persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                        break; // 如果只取第一张表，就取消注释这行
+                    }
+                }
+                // 改变文件更新表格
+                $('#example3').empty()
+                var container = document.getElementById('example3');
+                var hot = new Handsontable(container, {
+                    data: persons,
+                    rowHeaders: true,
+                    colHeaders: ['序号', '工号', '姓名', '性别', '手机号', '职称', '身份证', '邮箱', '学院', '部门', ],
+                    filters: true,
+                });
+                $('#hot-display-license-info').remove() //去掉广告（handsontable）
+
+                //检查格式
+                // stateLeaders = checkleaders(persons)
+                if (stateLeaders) {
+                    personLeaders = persons
+                    $("#submit-leaders").removeAttr('disabled')
+                } else
+                    $("#submit-leaders").attr("disabled", "disabled")
+
+
+                // hot.addHook('afterChange', function(changeData, source) {
+                //     // changeData 是一个数组，第一个元素(数组)，记录所有修改信息
+                //     if (!changeData) return;
+                //     var change = changeData[0],
+                //         row = change[0],
+                //         colProp = change[1],
+                //         preData = change[2],
+                //         newData = change[3];
+                //     // persons = savedata(1) 显示错误，但是修改不保存，可根据错误更改源文件重新上传
+                //     stateLeaders = checkleaders(persons)
+                //     if (stateLeaders) {
+                //         personRecord = persons
+                //     }
+                // })
+            };
+            // 以二进制方式打开文件
+            fileReader.readAsBinaryString(files[0]);
+        })
+
+        $("#submit-leaders").click(function() {
+            $("#alert-div").empty()
+            if (stateLeaders) {
+                personLeaders = personLeaders.map(r => {
+                    return {
+                        "username": r["工号"],
+                        "name": r["姓名"],
+                        "phone": r["手机号"],
+                        "institute": r["学院"],
+                        "gender": r["性别"] == "男" ? 0 : 1,
+                        "idcard": r["身份证"],
+                        "email": r["邮箱"],
+                        "department": r["部门"],
+                        "job": r["职称"],
+                    }
+                })
+                $.ajax({
+                    url: "?info=leaders",
+                    type: "POST",
+                    async: true,
+                    data: { data: JSON.stringify(personLeaders) },
+                    success: function(returndata) {
+                        var ins;
+                        if (returndata == "success") {
+                            alert("成功");
+                            ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >修改成功</div>'
+                            $("#alert-div").append(ins)
+                            window.location.reload();
+                            return;
+                        } else {
+                            ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                            $("#alert-div").append(ins)
+                        }
+
+                    }
+                })
+            }
+        })
+
+    })
+    </script>
+</body>
+
+</html>

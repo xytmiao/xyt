@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>日志列表</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div id="container-fluid">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">日志列表</h2>
+                <div class="row">
+                <div class="col-md-6 col-sm-8 col-xs-10 col-md-push-3 col-sm-push-2 col-xs-push-1 content" style=" box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2); background-color: #FFFFFF; font-size: 18px">
+                    <ul id="logs">
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        //日志列表
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                console.log(returndata);
+                var ins = '';
+                for (var i in returndata) {
+                    ins += '<li><a href="/root/' + returndata[i] + '" target="_blank">' + returndata[i] + '</a></li>'
+                }
+
+                $("#logs").append(ins);
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>

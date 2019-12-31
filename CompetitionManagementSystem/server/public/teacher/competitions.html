@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>我管理的竞赛</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">我管理的竞赛</h2>
+                <div class="table-responsive" style="text-align: center;margin-top: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                    <table id="allcompetitions" class="table table-hover" style="font-size: 18px;margin-bottom: 0px;">
+                        <tr>
+                            <td>序号</td>
+                            <td style="text-align: left;">竞赛名称</td>
+                            <td>管理</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (returndata.length == 1) {
+                    window.location.href = '/teacher/competition/' + returndata[0].id
+                    return;
+                }
+                $(document).ready(function() {
+                    var ins;
+                    var num = 0;
+                    for (i in returndata) {
+                        var isGraduate = returndata[i].isGraduate;
+                        var level = returndata[i].level;
+                        var abcclass = returndata[i].class;
+                        var attend = returndata[i].attend;
+                        ins = '<tr>' +
+                            '<td style="padding-top: 15px;">' + ++num + '</td>'
+
+                        ins += '<td style="padding-top: 10px;text-align: left;">' + returndata[i].name + '</td>';
+
+
+                        ins += '<td><a href="/teacher/competition/' + returndata[i].id + '""><button style="padding:2px; width: 150px;" type="button" class="btn btn-primary btn-lg">管理</button></a></td>';
+
+                        ins += '</tr>'
+                        $("#allcompetitions").append(ins)
+                    }
+                })
+            }
+        })
+    </script>
+</body>
+
+</html>

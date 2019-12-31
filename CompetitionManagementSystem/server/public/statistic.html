@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>学生信息统计</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.min.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/date.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">统计</h2>
+
+                <div style="background-color: #fff;padding: 10px 20px 10px 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                <form class="row form-group" style="margin-bottom: 10px;margin-top: 10px;">
+                    <div class="col-sm-2 col-sm-push-1">
+                        <label class="control-label">查询方式</label><br>
+                        <label class="radio-inline">
+                            <input type="radio" name="method" id="method" value="1" checked>按开始报名时间
+                        </label>
+                        <label class="radio-inline" style="margin-left: 0px;">
+                            <input type="radio" name="method" id="method" value="0">按获奖时间
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-sm-push-1">
+                        <label for="start" class="control-label">起始日期</label>
+                        <input type="text" class="form-control form_datetime" id="start" readonly placeholder="默认从1970-01-01">
+                    </div>
+                    <div class="col-sm-2 col-sm-push-1">
+                        <label for="end" class="control-label">结束日期</label>
+                        <input type="text" class="form-control form_datetime" id="end" readonly placeholder="默认到9102-12-31">
+                    </div>
+                    <div class="col-sm-2 col-sm-push-1">
+                        <label for="competition-select" class="control-label">竞赛</label>
+                        <select id="competition-select" class="form-control">
+                        </select>
+                    </div>
+                    <button style="margin-top: 25px;margin-right: 20px;" type="button" id="reselect" class="btn btn-primary col-sm-1 col-sm-push-1">重置字段</button>
+                    <button style="margin-top: 25px;" type="button" id="competition-submit" class="btn btn-primary col-sm-1 col-sm-push-1">查询</button>
+                </form>
+                <div class="btn-group" id="selecttype" role="group" aria-label="..." style="margin-left: 5%;">
+                    <button type="button" class="btn btn-default">序号</button>
+                    <button type="button" class="btn btn-default">竞赛名称</button>
+                    <button type="button" class="btn btn-default">开始报名时间</button>
+                    <button type="button" class="btn btn-default">获奖时间</button>
+                    <button type="button" class="btn btn-default">奖项</button>
+                    <button type="button" class="btn btn-default">项目名称</button>
+                    <button type="button" class="btn btn-default">参赛类别</button>
+                    <button type="button" class="btn btn-default">指导老师工号</button>
+                    <button type="button" class="btn btn-default">指导老师姓名</button>
+                    <button type="button" class="btn btn-default">指导老师性别</button>
+                    <button type="button" class="btn btn-default">指导老师手机</button>
+                    <button type="button" class="btn btn-default">指导老师学院</button>
+                    <button type="button" class="btn btn-default">指导老师部门</button>
+                    <button type="button" class="btn btn-default">指导老师身份证</button>
+                    <button type="button" class="btn btn-default">指导老师邮箱</button>
+                    <button type="button" class="btn btn-default">姓名</button>
+                    <button type="button" class="btn btn-default">性别</button>
+                    <button type="button" class="btn btn-default">学号</button>
+                    <button type="button" class="btn btn-default">学院</button>
+                    <button type="button" class="btn btn-default">专业</button>
+                    <button type="button" class="btn btn-default">班级</button>
+                    <button type="button" class="btn btn-default">年级</button>
+                    <button type="button" class="btn btn-default">手机</button>
+                    <button type="button" class="btn btn-default">邮箱</button>
+                    <button type="button" class="btn btn-default">年龄</button>
+                    <button type="button" class="btn btn-default">身份证号</button>
+                </div>
+                <div class="row table-responsive" style="margin-top: 30px;">
+                    <table id="competition-table" class="table table-striped table-bordered table-condensed">
+                        <tbody id="competition-record" align="center">
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#reselect").on("click", function() {
+            if ($("#types").length) {
+                $("#competition-record").empty();
+                $("#selecttype button").each(function() {
+                    $(this).removeClass("btn-success")
+                    $(this).addClass("btn-default")
+                })
+            }
+        })
+        $("#selecttype button").on("click", function() {
+            if ($("#types").next().length) {
+                $("#reselect").click();
+            }
+            if (!$("#types").length) {
+                $("#competition-record").prepend('<tr id="types"></tr>')
+            }
+            if ($(this).hasClass("btn-default")) {
+                $("#types").append('<td>' + $(this).text() + '</td>');
+                $(this).removeClass("btn-default")
+                $(this).addClass("btn-success")
+            } else {
+                $("#types").find('td:contains(' + $(this).text() + ')').remove();
+                $(this).removeClass("btn-success")
+                $(this).addClass("btn-default")
+            }
+        })
+        //竞赛select
+        $.ajax({
+            url: "?competitionlist=1",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                var ins = returndata.length == 1 ? '' : '<option>全部竞赛</option>'
+                for (var i in returndata) {
+                    ins += '<option value="' + returndata[i].id + '">' + returndata[i].name + '</option>'
+                }
+                $("#competition-select").append(ins)
+            }
+        })
+
+        $("#competition-submit").click(function() {
+            if (!$("#types").length) {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请选择字段</div>'
+                $("#alert-div").empty()
+                $("#alert-div").append(ins)
+                $("#alert-modal").modal('show');
+                return;
+            }
+
+            var args = 'types=' + escape($("#types").html()) +
+                '&start=' + escape(($("#start").val() == "" ? "1970-01-01" : $("#start").data("datetimepicker").getDate().pattern("yyyy-MM-dd"))) +
+                '&end=' + escape(($("#end").val() == "" ? "9102-12-31" : $("#end").data("datetimepicker").getDate().pattern("yyyy-MM-dd"))) +
+                '&competition=' + escape($("#competition-select").val()) +
+                '&method=' + escape($("#method:checked").val())
+
+            window.open("/" + ($("#nav-usertruename").text() == "负责人" ? "teacher" : "admin") + "/statistic/output?" + args, '_blank');
+        })
+
+
+    });
+    </script>
+</body>
+
+</html>

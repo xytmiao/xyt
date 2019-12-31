@@ -1,0 +1,47 @@
+﻿关于record
+学生报名(修改报名)后，教师审核前，username, grade进入record，此时教师审核界面看到的其他信息都应来自student
+教师审核通过后，学生的信息应进入record信息，
+
+关于时间
+record		
+	报名时间
+	审核时间
+	获奖时间
+	统计一段时间里的获奖情况应该用获奖时间
+one
+	记录发布时间即代表该比赛的时间
+
+record 增加省赛国赛 规模？
+
+
+统计
+第一次询问格式返回为
+[{
+	name: 蓝桥杯,
+}]
+负责人传负责人负责的比赛，管理员传所有比赛
+
+第二次查询格式为
+{
+	"competition":[ {name: 蓝桥杯,version:["第一届","第二届"]}, {name: 应用大赛,version:["第一届","第三届"]} ]
+	"member":["司展宇","徐启凯"],
+	"inst":["化学院"],
+	"leader":["。。。"],
+	"prize":["。。。"],
+	start: "",
+    end: "",
+    competition: "",
+}
+
+学生信息返回格式
+{
+	info: {学生的信息},
+	record: {学生参加的竞赛},
+}
+
+负责人应该查看到自己曾经负责过的所有竞赛的one
+	不同的one却是同一competition的只应该显示一次
+	竞赛改名了就应显示改名后的名字
+	列表显示该负责人负责过的competition, 来源于competition, 但只允许查该负责人的one
+	相同father不同name的one也应属于同一个competition，用新的名字
+

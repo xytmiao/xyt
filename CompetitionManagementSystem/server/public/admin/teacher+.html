@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>创建负责人</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">新建负责人</h2>
+                <!-- -----------------------------------本科生-------------------------------------------------- -->
+                <div style="padding:20px;width: 60%;margin: 0 auto;background-color: #fff;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                    <div class="row">
+                        <span style="font-size: 25px;padding-bottom: 20px;display: block;text-align: center; ">创建一位新负责人</span>
+                    </div>
+                    <div style="padding: 20px;" class="row">
+                        <div style="margin-top: 20px;">
+                            <p style="font-size: 15px;margin-bottom: 10px;">请输入新负责人工号:</p>
+                            <input style="width: 95%;display: inline-block;" type="text" class="form-control" id="teacher-username" placeholder="教师工号（5位）" required>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <p style="font-size: 15px;margin-bottom: 10px;">请输入新负责人密码:</p>
+                            <input style="width: 95%;display: inline-block;" type="text" class="form-control" id="password" placeholder="新负责人密码（8-16位）若留空则为默认密码12345678" required>
+                        </div>
+                        <div class="row">
+                            <div style="width: 200px;margin:20px auto;">
+                                <button style="width: 200px;" type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- </div> -->
+    </div>
+    </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript" src="/js/textarea_change.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#submit").click(function() {
+
+            if (!$("#teacher-username").val()) {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请全部填写！</div>'
+                $("#alert-div").empty()
+                $("#alert-div").append(ins)
+                return;
+            }
+            $("#password").val() || $("#password").val("12345678");
+
+            // if (!/^[A-Za-z0-9]+$/.test(req.body.username)) {
+            // res.send("账号必须是字母和数字的组合");
+            // return;
+            // }
+
+            if (!/^\w{7,15}$/.test($("#password").val())) {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >密码应是8-16位！且只包含数字、字母、下划线</div>'
+                $("#alert-div").empty()
+                $("#alert-div").append(ins)
+                return;
+            }
+
+            $.ajax({
+                url: "/admin/teacher/new",
+                type: "POST",
+                async: true,
+                data: {
+                    username: $("#teacher-username").val(),
+                    password: $("#password").val(),
+                },
+                success: function(returndata) {
+                    var ins;
+
+                    if (returndata == "success") {
+                        window.location.href = "/admin/teacher";
+                        return;
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+    })
+    </script>
+</body>
+
+</html>

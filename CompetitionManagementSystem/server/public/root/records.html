@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>申请信息列表</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div id="container-fluid">
+                 <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">申请信息</h2>
+                <div class="row" style="margin: 20px 0px 20px 0px">
+                    <div style="background-color: #fff; margin:0px 15px 20px 15px;min-height: 431px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);;padding: 20px;">
+                        <div id="records">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $.ajax({
+        url: "?info=1",
+        type: "GET",
+        async: true,
+        success: function(returndata) {
+            var count = 0
+            for (var i in returndata) {
+                count++;
+                var ins = '<h3>第' + count + '个申请信息</h3><pre id="record' + i + '"></pre>';
+                $("#records").append(ins);
+                $("#record" + i).text(JSON.stringify(returndata[i], null, 2));
+            }
+        }
+    })
+    </script>
+</body>

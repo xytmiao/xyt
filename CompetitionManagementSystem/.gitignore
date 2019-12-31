@@ -1,0 +1,6 @@
+
+*.DS_Store
+server/log
+server/dump_zip
+server/mongodump
+server/enclosure

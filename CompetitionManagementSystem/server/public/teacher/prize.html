@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>获奖信息处理</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.min.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="/js/date.js"></script>
+    <style>
+        .leftMenu .panel-heading{font-size:14px;padding-left:20px;height:36px;line-height:36px;color:white;position:relative;cursor:pointer;}
+        .leftMenu .menu-item-left{padding: 2px; background: transparent; border:1px solid transparent;border-radius: 6px;}
+        .lists li:hover{background-color: #cdcdcd;}  
+        h4 { padding: .2em; margin: 0; }
+        /*#products { float:left; width: 500px; margin-right: 2em; }*/
+        .cart { margin-top: 1em; }
+        /* 定义列表样式，以便最大化 droppable */
+        .cart ol { margin: 0; padding: 1em 0 1em 3em; }
+        .ui-state-default { background-color: rgb(205, 205, 205); }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">获奖情况</h2>
+                <ul class="nav nav-tabs" style="text-align: left;line-height: 40px;border-bottom: 1px solid #E0E1E2;font-size: 16px;">
+                    <li role="presentation" id="check-li"><a href="?action=one" class="nav-link">查看竞赛</a></li>
+                    <li role="presentation" id="notice-li"><a href="?action=notice" class="nav-link">查看通知</a></li>
+                    <li role="presentation" id="record-li"><a href="?action=record" class="nav-link">处理报名</a></li>
+                    <li role="presentation" id="prize-li" class="active"><a href="#prize-tab" class="nav-link" data-toggle="tab">获奖情况</a></li>
+                </ul>
+                <div id="prize-tab" class="tab-pane active" style="padding: 20px;">
+                    <div class="col-md-3 col-md-push-1" style="padding: 0px 0px;">
+                        <div class="panel-primary leftMenu">
+                            <ul class="list-group" id="records" style="overflow-x: hidden;max-height: 750px;">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-md-push-2" id="record" style="border: solid 10px #b3b3b3;padding-bottom: 20px;">
+                        <label for="prizeDate" style="margin-top: 1em;">颁奖日期</label>
+                        <input type="text" class="form-control form_datetime" id="prizeDate" readonly placeholder="请选择颁奖日期">
+                        <div id="prizetypes">
+                            <div id="prizetype1" class="cart">
+                                <h4 class="ui-widget-header"><input type="text" value="一等奖" style="width: 100%;" placeholder="请在此输入奖项类别(不输入默认为未获奖)"></h4>
+                                <div class="ui-widget-content">
+                                    <ul style="margin-bottom: 0px;list-style: none;padding-left: 0px;min-height: 30px;">
+                                        <p id="tips" style="margin-left: 1em;margin-top: 1em;">拖动添加参赛人/队伍到这里</p>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="prizetype2" class="cart">
+                                <h4 class="ui-widget-header"><input type="text" value="二等奖" style="width: 100%;" placeholder="请在此输入奖项类别(不输入默认为未获奖)"></h4>
+                                <div class="ui-widget-content">
+                                    <ul style="margin-bottom: 0px;list-style: none;padding-left: 0px;min-height: 30px;">
+                                        <p id="tips" style="margin-left: 1em;margin-top: 1em;">拖动添加参赛人/队伍到这里</p>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="prizetype3" class="cart">
+                                <h4 class="ui-widget-header"><input type="text" value="三等奖" style="width: 100%;" placeholder="请在此输入奖项类别(不输入默认为未获奖)"></h4>
+                                <div class="ui-widget-content">
+                                    <ul style="margin-bottom: 0px;list-style: none;padding-left: 0px;min-height: 30px;">
+                                        <p id="tips" style="margin-left: 1em;margin-top: 1em;">拖动添加参赛人/队伍到这里</p>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1em;margin-left: 30%;">
+                            <button style="width: 120px;" type="button" id="addmember" class="btn btn-primary">添加奖项类别</button>
+                            <button style="width: 120px;margin-left: 20px;" type="button" id="delmember" class="btn btn-primary">删除奖项类别</button>
+                        </div>
+                        <button style="width: 200px;margin-top: 2em;margin-left: 35%;" type="button" id="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var licont = 3;
+        var nowrecord = "1";
+
+        $.ajax({
+            url: "?info=ones",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (!returndata.data[0]) {
+                    $("#edit-li").detach();
+                }
+            }
+        })
+
+        $("#prizeDate").on('change', function() {
+            $.ajax({
+                url: '?info=prizeDate&prizeDate=' + $("#prizeDate").data("datetimepicker").getDate().pattern("yyyy-MM-dd"),
+                type: "GET",
+                async: true,
+                success: function(returndata) {}
+            })
+        })
+
+        function delprizeli() {
+            $(this).parent().parent().remove();
+        }
+
+        function drop(event, ui) {
+            $(this).find("#tips").css({ "background-color": "#fff", "font-size": "14px", "margin-left": "1em", "margin-top": ".5em", })
+            var flag = true;
+            $(".cart ul li").each(function() {
+                if ($(this).find("p").text() == ui.draggable.find('.menu-item-left').text()) {
+                    flag = false;
+                }
+            })
+            if (flag) {
+                var ins = '<li class="list-group-item">' +
+                    '<p class="menu-item-left" id="' + ui.draggable.find(".menu-item-left").attr("id") + '">' + ui.draggable.find(".menu-item-left").text() +
+                    '<button type="button" class="btn btn-default" aria-label="Left Align" style="float: right;">' +
+                    '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>' +
+                    '</button></p>' +
+                    '</li>'
+                $(this).append(ins);
+                $('p[id=' + ui.draggable.find(".menu-item-left").attr("id") + ']').find("button").on("click", delprizeli);
+            }
+        }
+
+        $(".cart ul").droppable({
+            activeClass: "ui-state-default",
+            hoverClass: "ui-state-hover",
+            accept: ":not(.ui-sortable-helper)",
+            drop: drop,
+            over: function(event, ui) {
+                $(this).find("#tips").css({ "background-color": "#e07676", "font-size": "50px", "margin-left": "0em", "margin-top": "0em", })
+            },
+            out: function(event, ui) {
+                $(this).find("#tips").css({ "background-color": "#fff", "font-size": "14px", "margin-left": "1em", "margin-top": ".5em", })
+            },
+        })
+
+        function competitionsclick() {
+            var the = $(this)
+            var the_id = the.attr("id")
+            if ($('#' + nowcompetition).length)
+                $('#' + nowcompetition).parent().css("background-color", "#fff")
+            nowcompetition = the_id
+            $('#' + nowcompetition).parent().css("background-color", "#cdcdcd")
+            $(".cart li").each(function() {
+                $(this).remove();
+            })
+            $("#prizeDate").val("")
+
+        }
+
+        $("#addmember").click(function() {
+            var ins = '<div id="prizetype' + ++licont + '" class="cart">' +
+                '<h4 class="ui-widget-header"><input type="text" value="" style="width: 100%;" placeholder="请在此输入奖项类别(不输入默认为未获奖)"></h4>' +
+                '<div class="ui-widget-content">' +
+                '<ul style="margin-bottom: 0px;list-style: none;padding-left: 0px;min-height: 30px;">' +
+                '<p id="tips" style="margin-left: 1em;margin-top: 1em;">拖动添加参赛人/队伍到这里</p>' +
+                '</ul>' +
+                '</div>' +
+                '</div>'
+            $("#prizetypes").append(ins)
+            $('.cart ul').droppable({
+                activeClass: "ui-state-default",
+                hoverClass: "ui-state-hover",
+                accept: ":not(.ui-sortable-helper)",
+                drop: drop,
+                over: function(event, ui) {
+                    $(this).find("#tips").css({ "background-color": "#e07676", "font-size": "50px", "margin-left": "0em", "margin-top": "0em", })
+                },
+                out: function(event, ui) {
+                    $(this).find("#tips").css({ "background-color": "#fff", "font-size": "14px", "margin-left": "1em", "margin-top": ".5em", })
+                },
+            })
+        })
+
+        $("#delmember").click(function() {
+            if (licont > 3) {
+                $('#prizetype' + licont).remove();
+                --licont;
+            }
+        })
+
+        $("#submit").click(function() {
+            var postdata = [];
+            for (var i = 1; i <= licont; i++) {
+                var item = {};
+                item.prize = $("#prizetype" + i).find("input").val();
+                item.record = [];
+                $("#prizetype" + i).find("li").each(function() {
+                    item.record.push($(this).find("p").attr("id"))
+                })
+                postdata.push(item)
+            };
+            $.ajax({
+                url: "?info=prize",
+                type: "POST",
+                async: true,
+                data: { datas: postdata },
+                success: function(returndata) {
+                    console.log(returndata);
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.href = '?action=prize'
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+        $.ajax({
+            url: "?info=prizes",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                $("#prizeDate").datetimepicker("setDate", new Date(returndata.prizeDate));
+                var ins;
+                $("#records").empty();
+                for (var i in returndata.records) {
+                    ins = '<li class="list-group-item" style="height: 50px;">'
+                    if (returndata.attend == 0) {
+                        if (returndata.records[i].item == "")
+                            ins += '<div class="menu-item-left" id="' + returndata.records[i].id + '" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 70%;float: left;">' + returndata.records[i].captain
+                        else
+                            ins += '<div class="menu-item-left" id="' + returndata.records[i].id + '" data-toggle="tooltip" data-placement="right" title="' + returndata.records[i].item + '" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 70%;float: left;">' + returndata.records[i].captain
+                    } else {
+                        ins += '<div class="menu-item-left" id="' + returndata.records[i].id + '" data-toggle="tooltip" data-placement="right" title="' + returndata.records[i].captain + '" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 70%;float: left;">' + returndata.records[i].item
+                    }
+                    ins += '</div>'
+                    if (returndata.records[i].prize)
+                        ins += '<div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width:20%;float: right;">' + returndata.records[i].prize + '</div>'
+                    else
+                        ins += '<div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width:20%;float: right;">未获奖</div>'
+                    ins += '</li>'
+                    $('div[id="' + returndata.records[i].id + '"]').tooltip()
+                    $("#records").append(ins)
+                    $("#records li").draggable({
+                        appendTo: "body",
+                        helper: "clone",
+                        cursor: "move",
+                        cursorAt: { top: 25, left: 45 },
+                    });
+                }
+            }
+        })
+
+        // $.ajax({
+        // url: "?info=1",
+        // type: "GET",
+        // async: true,
+        // success: function(returndata) {
+        // var ins;
+        // for (i in returndata) {
+        // ins = '<li class="list-group-item">' +
+        // '<button class="menu-item-left" id="' + returndata[i].id + '">' +
+        // returndata[i].name +
+        // '</button>' +
+        // '</li>'
+        // $("#competitions").append(ins)
+        // $('#' + returndata[i].id).on("click", competitionsclick)
+        // }
+        // }
+        // })
+    })
+    </script>
+</body>
+
+</html>

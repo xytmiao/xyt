@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>比赛通知</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+        .pagination{
+            margin:0px;
+        }
+        div.row:hover{
+            background-color: #0003;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align: center;font-size: 20px;">
+                    <p>是否删除？</p><br>
+                    <button style="width: 100px;" type="button" class="btn btn-default" data-dismiss="modal">否</button>
+                    <button style="width: 100px;" type="button" class="btn btn-primary" id="delete">是</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">比赛通知</h2>
+                <ul class="nav nav-tabs" style="text-align: left;line-height: 40px;border-bottom: 1px solid #E0E1E2;font-size: 16px;">
+                    <li role="presentation" id="check-li"><a href="?action=one" class="nav-link">查看竞赛</a></li>
+                    <li role="presentation" id="notice-li" class="active"><a href="#notice-tab" class="nav-link" data-toggle="tab">查看通知</a></li>
+                    <li role="presentation" id="record-li"><a href="?action=record" class="nav-link">处理报名</a></li>
+                    <li role="presentation" id="prize-li"><a href="?action=prize" class="nav-link">获奖情况</a></li>
+                </ul>
+                <div id="notice-tab" class="tab-pane active" style="padding: 20px;">
+                    <span>
+                        <a href="?action=noticenew"><button style="width: 200px;margin-right: 20px;margin-top: 10px;" class="btn btn-primary">点击发布竞赛通知</button></a>
+                    </span>
+                    <div style="background-color: #FFFFFF; font-size: 18px;padding: 20px 50px;margin-top: 20px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);">
+                        <div style="min-height: 440px;">
+                            <ul id="notice" class="uls">
+                            </ul>
+                        </div>
+                        <div style="text-align: center;font-size: 12px;margin-top: 20px;">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li><a id="first">首页</a></li>
+                                </ul>
+                                <ul class="pagination">
+                                    <li>
+                                        <a aria-label="Previous" id="up">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li id="lp1" class="active"><a class="" id="p1" onclick="clicka(1)">1</a></li>
+                                    <li id="lp2"><a class="" id="p2" onclick="clicka(2)">2</a></li>
+                                    <li id="lp3"><a class="" id="p3" onclick="clicka(3)">3</a></li>
+                                    <li id="lp4"><a class="" id="p4" onclick="clicka(4)">4</a></li>
+                                    <li id="lp5"><a class="" id="p5" onclick="clicka(5)">5</a></li>
+                                    <li>
+                                        <a aria-label="Next" id="down">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="pagination">
+                                    <li><a id="last">尾页</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    var urlDelete = "";
+    var page_all = new Number();
+
+    function clicka(i) {
+        getnotice(Number($("#p" + i).text()));
+    }
+
+    function getnotice(p) {
+        // 设置分页
+        if (p > 3 && p < page_all - 1) {
+            for (var j = 1; j <= 5; j++) {
+                $("#p" + j).text(p + j - 3);
+            }
+        } else if (p <= 3 || (p == 4 && p > page_all - 1)) {
+            for (var j = 1; j <= 5; j++) {
+                $("#p" + j).text(j);
+            }
+        } else {
+            for (var j = 1; j <= 5; j++) {
+                $("#p" + j).text(page_all + j - 5);
+            }
+        }
+        // 设置激活
+        for (var j = 1; j <= 5; j++) {
+            $("#p" + j).text() == p ? $("#lp" + j).attr("class", "active") : $("#lp" + j).attr("class", "");
+        }
+        // 更新页面
+        $("#notice").empty();
+        $.ajax({
+            url: "?info=notice&page=" + p,
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                var ins;
+                if (returndata.length == 0) {
+                    $("#notice").append('<span>暂无任何通知！</span>');
+                } else {
+                    for (i in returndata) {
+                        ins = '<div class="row" style="margin:0px 15px 0px 15px;">' +
+                            '<div class="col-md-9">' +
+                            '<ul class="uls">' +
+                            '<li style="border:none;">' +
+                            '<a class="row" href="/notice/' + returndata[i].id + '" style="display: block;line-height: 16px;position: relative;"  target="_blank">' +
+                            '<div class="col-md-10 words">' + returndata[i].title + '</div>' +
+                            '<div class="col-md-2 hidden-xs" style="margin-top:7px; position: absolute;right: 0;top: 0;color:#999;">' + returndata[i].date + '</div>' +
+
+                            '</a>' +
+                            '</li>' +
+                            '</ul>' +
+
+                            '</div>' +
+                            '<div class="col-md-3">' +
+                            '<div style="margin:4px 0px 10px 0px;">' +
+                            '<a  href="/notice/' + returndata[i].id + '">' + '</a>' +
+                            '<button style="background-color:#D35454;width: 70px;float:right;border-radius: 6px;" type="button" class="btDelete col-md-1 btn btn-primary" data-toggle="modal" data-target="#myModal">删 除</button>' +
+                            '<a href="/teacher/notice/' + returndata[i].id + '/edit "><button style="margin-right:10px;width: 70px;float:right;border-radius: 6px;" type="button" class="col-md-1 btn btn-primary">编辑</button></a>' +
+                            '</div>' +
+
+                            '</div>' +
+                            '</div>' +
+                            '<hr style="margin:0.5px;">'
+
+                        $("#notice").append(ins)
+                    }
+                }
+            }
+        })
+
+        $(".btDelete").on('click', function() {
+            urlDelete = "/teacher" + $(this).prev().attr('href') + "/delete";
+        })
+    }
+    $(document).ready(function() {
+        $.ajax({
+            url: "?info=noticepage",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                page_all = parseInt(returndata.page);
+                for (var i = 5; i > page_all; i--) {
+                    $("#p" + i).remove();
+                }
+            }
+        })
+        getnotice(1);
+        $("#up").click(function() {
+            for (var j = 2; j <= 5; j++) {
+                if ($("#lp" + j).attr("class") == "active") {
+                    clicka(j - 1);
+                    return;
+                }
+            }
+        })
+        $("#down").click(function() {
+            for (var j = 1; j <= 4 && j < page_all; j++) {
+                if ($("#lp" + j).attr("class") == "active") {
+                    clicka(j + 1);
+                    return;
+                }
+            }
+        })
+        $("#first").click(function() {
+            getnotice(1);
+
+        })
+        $("#last").click(function() {
+            getnotice(page_all);
+        })
+        $("#delete").click(function() {
+            $.ajax({
+                url: urlDelete,
+                type: "POST",
+                async: false,
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.reload()
+                        return;
+                    }
+                }
+            })
+        })
+    })
+    </script>
+</body>
+
+</html>

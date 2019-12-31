@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer content=webkit>
+    <meta charset="utf-8">
+    <title>申请信息处理</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+        .leftMenu .panel-heading{font-size:14px;padding-left:20px;height:36px;line-height:36px;color:white;position:relative;cursor:pointer;}
+        .leftMenu .menu-item-left{padding: 2px; background: transparent; border:1px solid transparent;border-radius: 6px;}
+        .lists li:hover{background-color: #cdcdcd;}
+        @media screen and (min-width: 768px) {
+            #records li li p{margin-right: 40px;}
+            #records{width: 80%;margin: auto;}
+        }
+        @media screen and (max-width: 767px) {
+            #studentsinfo{width: calc(100vw - 25px) !important;}
+        }
+        @media screen and (max-width: 991px) {
+            .modal-content{height: 800px !important;}
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="height: 750px">
+                <div class="row">
+                    <div class="col-md-6" style="text-align: center;margin: 30px 0px 30px 0px;">
+                        <div id="state"></div>
+                        <form action="" style="margin: 0px 50px 0px 50px;text-align: left;font-size: 15px;">
+                            <div class="form-group">
+                                <label for="item">队伍/项目名称</label>
+                                <input type="text" class="form-control" id="item" placeholder="选填" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">参赛类别</label>
+                                <input type="text" class="form-control" id="category" placeholder="选填" readonly>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label for="leader">指导老师工号/姓名</label>
+                                            <input type="search" autocomplete="off" class="form-control" id="leader0" list="leaderlist0" placeholder="输入工号或姓名">
+                                            <datalist id="leaderlist0" style="display: none;">
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button style="width: 100px;margin-top: 25px;" type="button" id="addleader" class="btn btn-primary">添加</button>
+                                    </div>
+                                    <div id="Leader" class="col-md-10">
+                                        <!-- <div class="form-group">
+                                            <label for="leader">指导老师工号/姓名</label>
+                                            <input type="search" autocomplete="off" class="form-control" id="leader0" list="leaderlist0" placeholder="输入工号或姓名">
+                                            <datalist id="leaderlist0" style="display: none;">
+                                            </datalist>
+                                        </div> -->
+                                    </div>
+                                    <div class="col-md-2" id="Leader_deal">
+                                        <!-- <button style="width: 100px;margin-top: 25px;" type="button" id="addleader" class="btn btn-primary">添加</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <form action="" style="margin: 30px 50px 0px 50px;text-align: left;font-size: 15px;" id="formmember">
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-striped table-bordered" style="overflow-x: scroll;width: 100%;">
+                    <tbody id="studentsinfo" style="overflow-x: scroll;width: 590px;display: block;white-space: nowrap;">
+                        <tr>
+                            <td>姓名</td>
+                            <td>性别</td>
+                            <td>学号</td>
+                            <td>学院</td>
+                            <td>专业</td>
+                            <td>班级</td>
+                            <td>年级</td>
+                            <td>手机</td>
+                            <td>邮箱</td>
+                            <td>年龄(岁)</td>
+                            <td>身份证号</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-left: 10%;">
+                    <label for="remark">给学生的留言：</label>
+                    <input type="text" class="form-control" id="remark" style="width: 90%;">
+                </div>
+                <div style="width: 80%;margin:20px auto;">
+                    <button style="width: 200px;float: left;" type="button" id="submit1" class="btn btn-success">修改并通过</button>
+                    <button style="width: 200px;float: right;" type="button" id="submit2" class="btn btn-danger">修改并驳回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">处理报名</h2>
+                <ul class="nav nav-tabs" style="text-align: left;line-height: 40px;border-bottom: 1px solid #E0E1E2;font-size: 16px;">
+                    <li role="presentation" id="check-li"><a href="?action=one" class="nav-link">查看竞赛</a></li>
+                    <li role="presentation" id="notice-li"><a href="?action=notice" class="nav-link">查看通知</a></li>
+                    <li role="presentation" id="record-li" class="active"><a href="#record-tab" class="nav-link" data-toggle="tab">处理报名</a></li>
+                    <li role="presentation" id="prize-li"><a href="?action=prize" class="nav-link">获奖情况</a></li>
+                </ul>
+                <div id="record-tab" class="tab-pane active" style="padding: 20px;">
+                    <div class="panel-primary leftMenu">
+                        <ul class="list-group" id="records" style="overflow-x: hidden;max-height: 750px;">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var licont = 0;
+        var count1 = 0;
+        var nowrecord = "1";
+        var leaders = [];
+        var leader_id = [];
+        var exist = false;
+        $.ajax({
+            url: "/leaders",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                console.log(returndata);
+                for (var i in returndata) {
+                    leaders.push(returndata[i])
+                }
+            }
+        })
+
+        delleader = function(num) {
+            if (num.id == count1) {
+                count1--;
+            }
+            $("#fleader" + num.id).remove();
+            $("#" + num.id).remove();
+        }
+
+        function find(id) {
+            $("#leader" + id).bind('input propertychange', function() {
+                var ins = ''
+                $("#leaderlist" + id).empty()
+                for (var i in leaders) {
+                    if ($("#leader" + id).val() == leaders[i].username.substring(0, $("#leader" + id).val().length) || $("#leader" + id).val() == leaders[i].name.substring(0, $("#leader" + id).val().length)) {
+                        ins += '<option value="' + leaders[i].username + '"><div>' +
+                            '<span>' + leaders[i].name + '</span> &nbsp&nbsp&nbsp' +
+                            '<p>' + leaders[i].institute + '</p>&nbsp&nbsp&nbsp' +
+                            '<p>' + leaders[i].department + '</p>&nbsp&nbsp&nbsp' +
+                            '</div></option > '
+                    }
+                }
+                $("#leaderlist" + id).append(ins);
+            })
+        }
+
+        funchange = function() {
+            var the = $(this)
+            the.parent().removeClass();
+            the.parent().addClass("form-group");
+            $(".form-group span").remove();
+            if (the.val() == "") {
+                exist = false;
+                return;
+            }
+            $.ajax({
+                url: "/exist?id=" + the.val(),
+                type: "GET",
+                async: true,
+                success: function(returndata) {
+                    if (returndata == "1" || returndata == "2") {
+                        the.parent().addClass("has-success has-feedback");
+                        the.parent().append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="margin-top: 5px;margin-right: 10px;"></span>')
+                        exist = true;
+
+                    } else {
+                        the.parent().addClass("has-error has-feedback");
+                        the.parent().append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="margin-top: 5px;margin-right: 10px;"></span>')
+                        the.parent().append('<span id="helpBlock2" class="help-block">未注册</span>')
+                        exist = false;
+
+                    }
+                }
+            })
+        }
+
+        $("#addleader").click(function() {
+            if ($("#leader0").val()) {
+                if (exist) {
+                    for (var k = 1; k <= count1; k++) {
+                        if ($("#leader0").val() == $("#leader" + k).val()) {
+                            alert("该指导老师已添加！")
+                            return;
+                        }
+                    }
+                    var ins = '<div class="form-group"  id="fleader' + ++count1 + '">' +
+                        '<label for="leader">指导老师</label>' +
+                        '<input type="search" autocomplete="off" class="form-control" id="leader' + count1 + '" class="leader" list="leaderlist' + count1 + '" readonly>' +
+                        '<datalist id="leaderlist' + count1 + '" style="display: none;">' +
+                        '</datalist> </div>'
+                    var ins1 = '<button style="width: 100px;margin-top: 25px;margin-bottom:15px" type="button" id="' + count1 + '" class="btn     btn-primary" onclick="delleader(this)">删除</button>'
+                    $("#Leader").append(ins)
+                    $("#Leader_deal").append(ins1)
+                    $('input[id^="leader' + count1 + '"]').on("change", funchange)
+                    $("#leader" + count1).val($("#leader0").val()).change()
+                    $("#leader0").val("")
+                } else alert("该指导老师不存在！")
+            }
+        })
+
+        find(0)
+        $('input[id^="leader0"]').on("change", funchange)
+        $.ajax({
+            url: "?info=ones",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (!returndata.data[0]) {
+                    $("#edit-li").detach();
+                }
+            }
+        })
+
+        function recordsclick() {
+            count1 = 0;
+            var the = $(this)
+            var the_id = the.attr("id")
+            nowrecord = the_id
+            $.ajax({
+                url: "?info=record&record=" + nowrecord,
+                type: "GET",
+                async: true,
+                success: function(returndata) {
+                    // console.log(returndata);
+                    var ins;
+                    $("#formmember").empty()
+                    $("#Leader").empty()
+                    $("#Leader_deal").empty()
+                    $("#item").val(returndata.item)
+                    $("#category").val(returndata.category)
+                    for (var i in returndata.member) {
+                        var ins = '<div class="form-group" id="fmmember' + i + '">'
+                        if (i == 0)
+                            ins += '<label>队长</label><br>'
+                        else
+                            ins += '<label>队员' + i + '</label><br>'
+                        ins += '<input type="text" class="form-control" style="padding-right: 12px;" id="member' + i + '" readonly>' +
+                            '</div>'
+                        $("#formmember").append(ins)
+                        $("#member" + i).val(returndata.member[i].username)
+                    }
+                    // if (count1 == 0) {
+                        for (var i in returndata.leader) {
+                            if (i >= 0) {
+                                exist = true;
+                                $("#leader0").val(returndata.leader[i].username)
+                                $("#addleader").trigger("click");
+                            }
+
+                        }
+                    // }
+
+                    $("#studentsinfo").empty()
+                    ins = '<tr>' +
+                        '<td>姓名</td>' +
+                        '<td>性别</td>' +
+                        '<td>学号</td>' +
+                        '<td>学院</td>' +
+                        '<td>专业</td>' +
+                        '<td>班级</td>' +
+                        '<td>年级</td>' +
+                        '<td>手机</td>' +
+                        '<td>邮箱</td>' +
+                        '<td>年龄(岁)</td>' +
+                        '<td>身份证号</td>' +
+                        '</tr>'
+                    $("#studentsinfo").append(ins)
+                    for (var i in returndata.member) {
+                        ins = '<tr>' +
+                            '<td>' + returndata.member[i].name + '</td>'
+                        ins += (returndata.member[i].gender == 0) ? '<td>男</td>' : '<td>女</td>'
+                        ins += '<td>' + returndata.member[i].username + '</td>' +
+                            '<td>' + returndata.member[i].institute + '</td>' +
+                            '<td>' + returndata.member[i].major + '</td>' +
+                            '<td>' + returndata.member[i].class + '</td>' +
+                            '<td>' + returndata.member[i].grade + '</td>' +
+                            '<td>' + returndata.member[i].phone + '</td>' +
+                            '<td>' + returndata.member[i].email + '</td>' +
+                            '<td>' + returndata.member[i].age + '</td>' +
+                            '<td>' + returndata.member[i].idcard + '</td>' +
+                            '</tr>'
+                        $("#studentsinfo").append(ins)
+                    }
+                    $('#myModal').modal('show')
+                }
+            })
+        }
+        $("button[id^=submit]").click(function() {
+            var btntype;
+            if ($(this).hasClass("btn-success")) btntype = "1";
+            else btntype = "2";
+            for (var k = 1; k <= count1; k++) {
+                for (var i in leaders) {
+                    if ($("#leader" + k).val() == leaders[i].username) {
+                        leader_id.push({ _id: leaders[i]._id })
+                    }
+                }
+            }
+            $.ajax({
+                url: "?info=record&record=" + nowrecord,
+                type: "POST",
+                async: true,
+                data: {
+                    item: $("#item").val(),
+                    category: $("#category").val(),
+                    leader: leader_id,
+                    remark: $("#remark").val(),
+                    status: btntype,
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        window.location.href = '?action=record'
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+
+        $.ajax({
+            url: "?info=records",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                var ins;
+                $("#records").empty();
+                for (var i in returndata.records) {
+                    if (returndata.records[i].status == 0)
+                        returndata.records[i].status = '未审核'
+                    else if (returndata.records[i].status == 1)
+                        returndata.records[i].status = '已通过'
+                    else if (returndata.records[i].status == 2)
+                        returndata.records[i].status = '未通过'
+                    if (returndata.attend == "attend" && returndata.records[i].category == "")
+                        returndata.records[i].category = "全部分类"
+                    if (!$('button:contains(' + returndata.records[i].category + ').triangle').length) {
+                        ins = '<li class="list-group-item panel-default">' +
+                            '<button class="menu-item-left triangle" data-toggle="collapse" href="#collapse' + ++licont + '" style="margin-bottom: 5px;">' +
+                            '<span class="glyphicon glyphicon-triangle-bottom"></span>' + returndata.records[i].category +
+                            '</button>' +
+                            '<ul class="list-group panel-collapse collapse in lists" id="collapse' + licont + '">' +
+                            '</ul>' +
+                            '</li>'
+                        $("#records").append(ins)
+                        //箭头转换
+                        $('button[href="#collapse' + licont + '"]').on("click", function() {
+                            if ($(this).find("span").hasClass("glyphicon-triangle-bottom")) {
+                                $(this).find("span").removeClass("glyphicon-triangle-bottom");
+                                $(this).find("span").addClass("glyphicon-triangle-right");
+                            } else {
+                                $(this).find("span").removeClass("glyphicon-triangle-right");
+                                $(this).find("span").addClass("glyphicon-triangle-bottom");
+                            }
+                        });
+                    }
+                    ins = '<li class="list-group-item">'
+                    if (returndata.attend == 0) {
+                        if (returndata.records[i].item == "")
+                            ins += '<button class="menu-item-left" id="' + returndata.records[i].id + '" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 70%;">' + returndata.records[i].captain
+                        else
+                            ins += '<button class="menu-item-left" id="' + returndata.records[i].id + '" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 70%;">' + returndata.records[i].captain
+                    } else {
+                        ins += '<button class="menu-item-left" id="' + returndata.records[i].id + '" data-toggle="tooltip" data-placement="right" title="' + returndata.records[i].captain + '" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 70%;">' + returndata.records[i].item
+                    }
+                    ins += '</button>' +
+                        '<p class="" style="color: #fff;border-radius:5px;float: right;font-size: 17px;">' + returndata.records[i].status + '</p>' +
+                        '</li>'
+                    $('button:contains(' + returndata.records[i].category + ').triangle').next().append(ins)
+                    $('button[id="' + returndata.records[i].id + '"]').on("click", recordsclick)
+                    $('button[id="' + returndata.records[i].id + '"]').tooltip()
+
+                    if (returndata.records[i].status == "未审核")
+                        $('button[id="' + returndata.records[i].id + '"]').next().css("color", "#EC971F")
+                    else if (returndata.records[i].status == "未通过")
+                        $('button[id="' + returndata.records[i].id + '"]').next().css("color", "#c9302c")
+                    else if (returndata.records[i].status == "已通过")
+                        $('button[id="' + returndata.records[i].id + '"]').next().css("color", "#449D44")
+                }
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>

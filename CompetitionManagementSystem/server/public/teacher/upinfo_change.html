@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <meta name=renderer content=webkit>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <title>个人信息</title>
+</head>
+
+<body>
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 100px;padding: 5px;padding-top: 15px;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">个人信息</h2>
+                <!-- --------------------------------------------------个人信息------------------------------------------------- -->
+                <div style="margin: 20px;min-height: 480px;box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);background-color: #fff;">
+                    <!-- --------------------------------------------------两列信息栏-------------------------------------------------- -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form class="" style="margin: 20px 50px 0px 50px;text-align: left;font-size: 15px;">
+                                <div class="form-group">
+                                    <label for="name">姓名</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="idcard">身份证号</label>
+                                    <input type="text" class="form-control" id="idcard">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">手机号</label>
+                                    <input type="text" class="form-control" id="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">邮箱地址</label>
+                                    <input type="text" class="form-control" id="email">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-5">
+                            <form class="" style="margin: 23px 50px 0px 50px;text-align: left;font-size: 15px;">
+                                <div class="form-group">
+                                    <div style="font-weight: bold;margin: 2px 20px 0px 0px;float: left;">性别:</div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="gender" id="gender" value=0>男
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="gender" id="gender" value=1>女
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="institute">学院</label>
+                                    <select style="" class="form-control" name="institute" id="institute">
+                                        <option selected>--请选择学院--</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="major">专业</label>
+                                    <select style="" class="form-control" name="major" id="major">
+                                        <option selected>--请选择专业--</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div style="width: 200px;margin: 10px auto;">
+                        <button style="width: 200px;margin-top: 20px;" type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">提交</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript" src="/js/date.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var majors = new Object();
+        var classes = new Object();
+
+        $.ajax({
+            url: "/json/studentinfo.json",
+            async: false,
+            success: function(data) {
+                majors["--请选择学院--"] = ["--请选择专业--"];
+                for (var i in data) {
+                    $("#institute").append('<option value="' + i + '">' + i + '</option>')
+                    majors[i] = ["--请选择专业--"];
+                    for (var m in data[i]) {
+                        majors[i].push(data[i][m][0]);
+                        classes[data[i][m][0]] = data[i][m][1]
+                    }
+                }
+            }
+        });
+        // $.getJSON("/json/studentinfo.json", function(data) {
+        //     majors["--请选择学院--"] = ["--请选择专业--"];
+        //     for (var i in data) {
+        //         $("#institute").append('<option value="' + i + '">' + i + '</option>')
+        //         majors[i] = ["--请选择专业--"];
+        //         for (var m in data[i]) {
+        //             majors[i].push(data[i][m][0]);
+        //             classes[data[i][m][0]] = data[i][m][1]
+        //         }
+        //     }
+        // })
+        $("#institute").change(function() {
+            var whichinst = $(this).children('option:selected').val();
+            $("#major").empty();
+            $("#class").empty();
+            for (var i in majors[whichinst]) {
+                var option = '<option value="' + majors[whichinst][i] + '">' + majors[whichinst][i] + '</option>';
+                $("#major").append(option);
+            }
+            $("#abbr").empty()
+            $("#abbr").append("请选择专业");
+
+        })
+        $("#major").change(function() {
+            var whichmajor = $(this).children('option:selected').val();
+            $("#abbr").empty();
+            $("#abbr").append(classes[whichmajor]);
+        })
+
+        $("#submit").click(function() {
+            $.ajax({
+                url: "",
+                type: "POST",
+                async: true,
+                data: {
+                    name: $("#name").val(),
+                    gender: $("#gender:checked").val(),
+                    idcard: $("#idcard").val(),
+                    phone: $("#phone").val(),
+                    institute: $("#institute").val(),
+                    major: $("#major").val(),
+                    email: $("#email").val()
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >修改成功</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                        setTimeout(function() {
+                            window.location.href = "/teacher/upinfo"
+                        }, 1000);
+                        return;
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                $("#email").val(returndata.email);
+                $("#name").val(returndata.name);
+                $("#idcard").val(returndata.idcard);
+                $("#phone").val(returndata.phone);
+                if (returndata.gender == 1)
+                    $("input[type=radio][name=gender][value=1]").attr("checked", 'checked');
+                else
+                    $("input[type=radio][name=gender][value=0]").attr("checked", 'checked');
+                if (!returndata.name) {
+                    $("#institute").val("--请选择学院--");
+                    $("#institute").trigger("change");
+                    $("#major").val("--请选择专业--");
+                    $("#major").trigger("change");
+                } else {
+                    $("#institute").val(returndata.institute);
+                    $("#institute").trigger("change");
+                    $("#major").val(returndata.major);
+                    $("#major").trigger("change");
+                }
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>

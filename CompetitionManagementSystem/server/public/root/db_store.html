@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta name=renderer  content=webkit>
+    <meta charset="utf-8">
+    <title>数据库备份/恢复</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+</head>
+
+<body>
+    <!-- --------------------------------------------------导航栏-------------------------------------------------- -->
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div id="container-fluid">
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">数据库备份</h2>
+                <div class="content" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin:20px; background-color: #FFFFFF; font-size: 18px;padding: 20px 50px;min-height: 0px;">
+                    <a href="/root/db/dump"><button type="button" class="btn btn-primary">点击下载数据库备份压缩包</button></a>
+                </div>
+                <h2 style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 20px; font-size: 26px;">数据库恢复</h2>
+                <div class="content" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);margin:20px; background-color: #FFFFFF; font-size: 18px;padding: 20px 50px;min-height: 0px;">
+                    <form enctype="multipart/form-data" method="post" action="/root/db/store">
+                        <input type="file" name="file" accept="application/zip">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 20px;">提交压缩包</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+</body>
+
+</html>

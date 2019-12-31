@@ -1,0 +1,147 @@
+/*@grid-float-breakpoint: 1024px;*/
+
+/*导航栏*/
+html,
+body {
+    width: 100%;
+    height: 100%;
+    /*background: url(/img/bg.gif) repeat;*/
+}
+
+/*非常重要的样式让背景图片100%适应整个屏幕*/
+.bg {
+    display: table;
+    width: 100%;
+    height: 100%;
+    padding: 100px 0;
+    text-align: center;
+    color: #fff;
+    background-color: #000;
+    background-size: cover;
+}
+
+.my-navbar {
+    padding: 20px 0;
+    /*transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;*/
+}
+
+.my-navbar a {
+    background: transparent !important;
+    color: #fff
+}
+
+.my-navbar a:hover {
+    color: #45bcf9 !important;
+    background: transparent;
+    outline: 0
+}
+
+.my-navbar a {
+    transition: color 0.5s ease-in-out;
+}
+
+/*-webkit-transition ;-moz-transition*/
+.top-nav {
+    padding: 0;
+    background: #fff;
+    height: 70px !important;
+}
+
+.top-nav li {
+    background: none !important;
+}
+
+.top-nav a {
+    color: #000 !important;
+}
+
+@media screen and (max-width: 1040px) {
+    .top-nav li {
+        background: url(/img/nav_x.png) !important;
+    }
+
+    .top-nav a {
+        color: #fff !important;
+    }
+}
+
+button.navbar-toggle {
+    background-color: #fbfbfb;
+}
+
+/*整个背景都是transparent透明的，会看不到，所以再次覆盖一下*/
+button.navbar-toggle>span.icon-bar {
+    background-color: #dedede
+}
+
+/*导航栏背景图*/
+ul.navbar-nav li {
+    background: url(/img/nav_x.png);
+    text-align: center;
+}
+
+/*处理手机上汉堡菜单错行*/
+@media screen and (max-width: 500px) {
+    .navbar-header div {
+        width: 300px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .navbar-header div {
+        width: 400px;
+    }
+}
+
+/*ipad上汉堡菜单显示*/
+@media (max-width: 1200px) {
+    /*汉堡菜单显示时页头图片向下移*/
+    #ny_bg,
+    #carousel-example-generic {
+        margin-top: 90px;
+    }
+
+    .navbar-header {
+        float: none;
+    }
+
+    .navbar-left，.navbar-right {
+        float: none !important;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-fixed-top {
+        top: 0;
+        border-width: 0 0 1px;
+    }
+
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+
+    .navbar-nav {
+        float: none !important;
+        margin-top: 7.5px;
+    }
+
+    .navbar-nav>li {
+        float: none;
+    }
+
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .collapse.in {
+        display: block !important;
+    }
+}

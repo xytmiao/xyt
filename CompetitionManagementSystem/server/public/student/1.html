@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer content=webkit>
+    <meta charset="utf-8">
+    <title>竞赛报名</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- --------------------------------------------------警告提示-------------------------------------------------- -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="alert-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div style="background-color: #f2dede" class="modal-content" id="alert-div">
+                <!-- 动态插入 -->
+            </div>
+        </div>
+    </div>
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <!-- --------------------------------------------------主体内容-------------------------------------------------- -->
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <!-- --------------------------------------------------竞赛名称-------------------------------------------------- -->
+                <div class="row" style="margin: 30px 20px 20px 20px;background-color: #fff;">
+                    <div class="col-md-6" style="text-align: center;margin: 62px 0px 30px 0px;">
+                        <div id="state"></div>
+                        <form action="" style="text-align: left;font-size: 15px;">
+                            <div class="form-group">
+                                <label for="item">队伍/项目名称</label>
+                                <input type="text" class="form-control" id="item" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">参赛类别</label>
+                                <!-- <input type="text" class="form-control" id="category" placeholder="选填"> -->
+                                <select style="" class="form-control" name="category" id="category">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div id="Leader" class="col-md-10">
+                                        <div class="form-group">
+                                            <label for="leader">指导老师工号/姓名</label>
+                                            <input type="search" autocomplete="off" class="form-control" id="leader0" list="leaderlist0" placeholder="输入工号或姓名">
+                                            <datalist id="leaderlist0" style="display: none;">
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" id="Leader_deal">
+                                        <button style="width: 100px;margin-top: 25px;" type="button" id="addleader" class="btn btn-primary">添加</button>
+                                    </div>
+                                </div>
+                                <button style="width: 200px;margin-top: 15px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新建未注册指导老师</button>
+                            </div>
+                            <!-- Button trigger modal -->
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">指导老师信息填写</h4>
+                                        </div>
+                                        <!-- 指导老师信息填写 -->
+                                        <div class="modal-body">
+                                            <div id="username_" class="form-group">
+                                                <label>工号</label>
+                                                <input type="text" class="form-control" id="username" maxlength="50">
+                                            </div>
+                                            <div id="name_" class="form-group">
+                                                <label>姓名</label>
+                                                <input type="text" class="form-control" id="name" maxlength="50">
+                                            </div>
+                                            <div id="gender_" class="form-group">
+                                                <label>性别</label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="gender" id="gender" value="0" checked>男
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="gender" id="gender" value="1">女
+                                                </label>
+                                            </div>
+                                            <div id="phone_" class="form-group">
+                                                <label>手机号</label>
+                                                <input type="text" class="form-control" id="phone" maxlength="50">
+                                            </div>
+                                            <div id="institute_" class="form-group">
+                                                <label>学院</label>
+                                                <input type="text" class="form-control" id="institute" maxlength="50">
+                                            </div>
+                                            <div id="idcard_" class="form-group">
+                                                <label>身份证</label>
+                                                <input type="text" class="form-control" id="idcard" maxlength="50">
+                                            </div>
+                                            <div id="email_" class="form-group">
+                                                <label>邮箱</label>
+                                                <input type="text" class="form-control" id="email" maxlength="50">
+                                            </div>
+                                            <div id="department_" class="form-group">
+                                                <label>部门</label>
+                                                <input type="text" class="form-control" id="department" maxlength="50">
+                                            </div>
+                                            <div id="job_" class="form-group">
+                                                <label>职称</label>
+                                                <input type="text" class="form-control" id="job" maxlength="50">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="button" class="btn btn-primary" id="leader_new">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div style="font-weight: bold;margin: 2px 20px 0px 0px;float: left;">是否需要招募队员</div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="recruit" id="recruit" value="true" checked>是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="recruit" id="recruit" value="false">否
+                                </label>
+                            </div>
+                            <div id="introduction_" class="form-group">
+                                <label for="introduction">该项目的基本介绍</label>
+                                <input type="text" class="form-control" id="introduction" placeholder="若不需招募可不填写(最多50字)" maxlength="50">
+                            </div>
+                            <div id="condition_" class="form-group">
+                                <label for="condition">该项目的招募条件</label>
+                                <input type="text" class="form-control" id="condition" placeholder="若不需招募可不填写(最多30字)" maxlength="30">
+                            </div>
+                        </form>
+                    </div>
+                    <!-- 添加队员 -->
+                    <div class="col-md-6" style="text-align: center;">
+                        <p style="font-size: 25px;margin-top: 20px;margin-bottom: 10px;">添加队员(请填写学号)</p>
+                        <form action="" style="text-align: left;font-size: 15px;" id="formmember">
+                            <div class="form-group" id="fmmember0">
+                                <label for="member0">队长</label><br>
+                                <input type="text" class="form-control" style="padding-right: 12px;" id="member0" readonly>
+                            </div>
+                        </form>
+                        <button style="width: 100px;" type="button" id="addmember" class="btn btn-primary">添加队员</button>
+                        <button style="width: 100px;margin-left: 20px;" type="button" id="delmember" class="btn btn-primary">删除队员</button>
+                    </div>
+                    <div style="width: 200px;margin:20px auto;">
+                        <button style="width: 200px;" type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">提交</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    $("input[id='recruit']").on("click", function() {
+        if ($(this).val() == "false") {
+            $("#introduction_").hide();
+            $("#condition_").hide();
+        } else {
+            $("#introduction_").show();
+            $("#condition_").show();
+        }
+    })
+    $(document).ready(function() {
+        var count = 0;
+        var count1 = 0;
+        var leaders = [];
+        var leader_id = [];
+
+        $("#member0").val($("#nav-username").html())
+
+        $.ajax({
+            url: "/leaders",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                console.log(returndata);
+                for (var i in returndata) {
+                    leaders.push(returndata[i])
+                }
+            }
+        })
+
+        delleader = function(num) {
+            if (num.id == count1) {
+                count1--;
+            }
+            $("#fleader" + num.id).remove();
+            $("#" + num.id).remove();
+            console.log(count1);
+        }
+
+        function find(id) {
+            $("#leader" + id).bind('input propertychange', function() {
+                var ins = ''
+                $("#leaderlist" + id).empty()
+                for (var i in leaders) {
+                    if ($("#leader" + id).val() == leaders[i].username.substring(0, $("#leader" + id).val().length) || $("#leader" + id).val() == leaders[i].name.substring(0, $("#leader" + id).val().length)) {
+                        ins += '<option value="' + leaders[i].username + '"><div>' +
+                            '<span>' + leaders[i].name + '</span> &nbsp&nbsp&nbsp' +
+                            '<p>' + leaders[i].institute + '</p>&nbsp&nbsp&nbsp' +
+                            '<p>' + leaders[i].department + '</p>&nbsp&nbsp&nbsp' +
+                            '</div></option > '
+                    }
+                }
+                $("#leaderlist" + id).append(ins);
+            })
+        }
+
+        function funchange() {
+            var the = $(this)
+            the.parent().removeClass();
+            the.parent().addClass("form-group");
+            $(".form-group span").remove();
+            if (the.val() == "") {
+                exist = false;
+                return;
+            }
+            $.ajax({
+                url: "/exist?id=" + the.val(),
+                type: "GET",
+                async: true,
+                success: function(returndata) {
+                    if (returndata == "1" || returndata == "2") {
+                        the.parent().addClass("has-success has-feedback");
+                        the.parent().append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="margin-top: 5px;margin-right: 10px;"></span>')
+                        exist = true;
+                    } else {
+                        the.parent().addClass("has-error has-feedback");
+                        the.parent().append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="margin-top: 5px;margin-right: 10px;"></span>')
+                        the.parent().append('<span id="helpBlock2" class="help-block">未注册</span>')
+                        exist = false;
+                    }
+                }
+            })
+        }
+
+        $("#addmember").click(function() {
+            var ins = '<div class="form-group" id="fmmember' + ++count + '">' +
+                '<label>队员' + count + '</label><br>' +
+                '<input type="text" class="form-control" style="padding-right: 12px;" id="member' + count + '">' +
+                '</div>'
+            $("#formmember").append(ins)
+            $('input[id^="member' + count + '"]').on("change", funchange)
+        })
+
+        $("#addleader").click(function() {
+            if ($("#leader0").val()) {
+                if (exist) {
+                    for (var k = 1; k <= count1; k++) {
+                            if ($("#leader0").val() == $("#leader"+k).val()) {
+                                alert("该指导老师已添加！")
+                                return;
+                            }
+                        
+                    }
+                    var ins = '<div class="form-group"  id="fleader' + ++count1 + '">' +
+                        '<label for="leader">指导老师</label>' +
+                        '<input type="search" autocomplete="off" class="form-control" id="leader' + count1 + '" class="leader" list="leaderlist' + count1 + '" readonly>' +
+                        '<datalist id="leaderlist' + count1 + '" style="display: none;">' +
+                        '</datalist> </div>'
+                    var ins1 = '<button style="width: 100px;margin-top: 40px;" type="button" id="' + count1 + '" class="btn     btn-primary" onclick="delleader(this)">删除</button>'
+                    $("#Leader").append(ins)
+                    $("#Leader_deal").append(ins1)
+                    $('input[id^="leader' + count1 + '"]').on("change", funchange)
+                    $("#leader" + count1).val($("#leader0").val()).change()
+                    $("#leader0").val("")
+                } else alert("该指导老师不存在！")
+            }
+        })
+
+        $("#delmember").click(function() {
+            if (count > 0) {
+                $('#fmmember' + count).remove();
+                --count;
+            }
+        })
+
+        find(0)
+        $('input[id^="leader0"]').on("change", funchange)
+        // 提交指导老师信息
+        $("#leader_new").click(function() {
+            if ($("#username").val() == "" || $("#name").val() == "" || $("#phone").val() == "" || $("#institute").val() == "" || $("#idcard").val() == "" || $("#email").val() == "" || $("#department").val() == "" || $("#job").val() == "") {
+                alert("请填写完整！")
+                return;
+            }
+            $.ajax({
+                url: "?info=leader",
+                type: "POST",
+                async: false,
+                data: {
+                    username: $("#username").val(),
+                    name: $("#name").val(),
+                    gender: $("#gender:checked").val(),
+                    phone: $("#phone").val(),
+                    institute: $("#institute").val(),
+                    idcard: $("#idcard").val(),
+                    email: $("#email").val(),
+                    department: $("#department").val(),
+                    job: $("#job").val()
+                },
+                success: function(returndata) {
+                    if (returndata) {
+                        $('#leader0').val($("#username").val()).change();
+                        $('#myModal').modal('hide');
+                        leaders.push({ username: $("#username").val(), _id: returndata })
+                    } else alert("提交失败！")
+                }
+            })
+        })
+
+        // 全部填写完成提交
+        $("#submit").click(function() {
+            var members = [];
+            for (var i = 0; i <= count; i++) {
+                members.push($('#member' + i).val())
+            }
+            for (var i = 0; i < members.length; i++) {
+                if (members[i] == "") {
+                    ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请填写完整</div>'
+                    $("#alert-div").empty()
+                    $("#alert-div").append(ins)
+                    return;
+                }
+            }
+            if ($("#item").val() == "" || $("#leader").val() == "" || $("#category").val() == "--请选择类别--") {
+                ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >请填写完整</div>'
+                $("#alert-div").empty()
+                $("#alert-div").append(ins)
+                return;
+            }
+            for (var i = 0; i < members.length; i++) {
+                if ($("#fmmember" + i).hasClass('has-error')) {
+                    ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >有成员还未注册</div>'
+                    $("#alert-div").empty()
+                    $("#alert-div").append(ins)
+                    return;
+                }
+            }
+            for (var i = 0; i < members.length; i++) {
+                for (var j = i + 1; j < members.length; j++) {
+                    if (members[i] == members[j]) {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >成员重复</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                        return;
+                    }
+                }
+            }
+            // 循环比较提交工号与指导老师列表，确定指导老师
+            for (var k = 1; k <= count1; k++) {
+                for (var i in leaders) {
+                    if ($("#leader" + k).val() == leaders[i].username) {
+                        leader_id.push({ _id: leaders[i]._id })
+                    }
+                }
+            }
+            $.ajax({
+                url: "?info=1",
+                type: "POST",
+                async: true,
+                data: {
+                    item: $("#item").val(),
+                    category: $("#category").val(),
+                    leader: leader_id,
+                    recruit: $("#recruit:checked").val(), //增加招募字段
+                    introduction: $("#introduction").val(), //增加介绍字段
+                    condition: $("#condition").val(), //增加招募条件
+                    member: members
+                },
+                success: function(returndata) {
+                    var ins;
+                    if (returndata == "success") {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >报名成功</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                        setTimeout(function() {
+                            window.location.href = "/student/record"
+                        }, 1000);
+                    } else {
+                        ins = '<div style="z-index: 100; padding-top: 5%;padding-bottom: 5%;font-size: 200%;text-align: center;color:#a94442;" >' + returndata + '</div>'
+                        $("#alert-div").empty()
+                        $("#alert-div").append(ins)
+                    }
+                }
+            })
+        })
+        $.ajax({
+            url: "?info=1",
+            type: "GET",
+            async: true,
+            success: function(returndata) {
+                var ins = '<option selected>--请选择类别--</option>';
+                if (returndata.category.length == 0) {
+                    ins += '<option selected>无</option>';
+                } else {
+                    for (var i in returndata.category) {
+                        ins += '<option>' + returndata.category[i].name + '</option>';
+                    }
+                }
+                $("#category").append(ins);
+            }
+        })
+
+    })
+    </script>
+</body>
+
+</html>

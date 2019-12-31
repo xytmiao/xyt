@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name=renderer content=webkit>
+    <meta charset="utf-8">
+    <title>竞赛列表</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/AdminLTE.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/adminlte.js"></script>
+    <style>
+        .pagination{
+        margin:0px;
+    }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align: center;font-size: 20px;">
+                    <p>是否确认报名？</p><br>
+                    <button style="width: 100px;" type="button" class="btn btn-default" data-dismiss="modal">否</button>
+                    <a id="in"><button style="width: 100px;" type="button" class="btn btn-primary">是</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header class="main-header" style="height: 84px;padding: 5px;padding-top: 15px;background-color:#FEFEFE;"></header>
+    <aside class="main-sidebar" style="padding-top: 120px;padding-left: 60px;"></aside>
+    <script type="text/javascript" src="/js/navbar.js"></script>
+    <div class="content-wrapper">
+        <section style="padding-top: 40px;">
+            <div class="tab-content" style="margin-right: 20px;margin-left: 20px;">
+                <h2 id="detail" style="font-weight: 400;line-height: 1;margin: 0px 0px 40px 0px; font-size: 26px;">竞赛详情</h2>
+                <!-- --------------------------------------------------竞赛名称-------------------------------------------------- -->
+                <!-- <div class="row" style="margin-right: 0px;"> -->
+                <ul class="nav nav-tabs">
+                    <li role="presentation" id="introduction-li" class="active" style="width: 30%; text-align: center;"><a href="#introduction-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">竞赛简介</a></li>
+                    <li role="presentation" id="notice-li" style="width: 30%; text-align: center;"><a href="#notice-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">竞赛通知</a></li>
+                    <li role="presentation" id="recruit-li" style="width: 30%; text-align: center;"><a href="#recruit-tab" class="nav-link" data-toggle="tab" style="font-size: 20px;">参赛队伍</a></li>
+                </ul>
+                <!-- ---------------------------------------介绍框----------------------------------------------- -->
+                <div id="introduction-tab" class="tab-pane active" style="margin-top: 20px;">
+                    <div>
+                        <div style="margin-left: 15px;">
+                            <div class="row" style="padding: 10px; box-shadow: 1px 1px 3px rgba(34, 25, 25, 0.2);text-align: center;margin-bottom: 20px;min-height: 300px;background-color:#fff;border-radius: 5px;">
+                                <h2 id="title" style="width: 70%;margin: 0 auto;padding: 25px 0 15px 0;font-size: 18px;"></h2>
+                                <div id="introduction" style="text-align: left; overflow-y: auto;height: 210px;font-size: 16px;line-height: 24px;margin: 20px 20px 20px 20px;">
+                                </div>
+                                <br><br><br><br>
+                                <div class="row" style="text-align: left;font-size: 18px;">
+                                    <span class="the_p" style="margin-right: 30px;margin-left: 50px;">竞赛形式：</span>
+                                    <span id="attend" style="color: #F85151;"></span>
+                                </div>
+                                <br>
+                                <div class="row" style="text-align: left;font-size: 18px;">
+                                    <span class="the_p" style="margin-left: 50px;">报名/截止时间:</span>
+                                    <span id="beginend" style="margin-left: 30px;;color: #F85151;display: inline-block;"></span>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <p class="the_p" style="text-align: left; margin: 20px 50px 10px 50px;font-size: 18px;border-bottom: solid 1px black;">竞赛举办方</p>
+                                    <h3 id="sponsor" style="font-size: 18px;margin:5px 50px;"></h3>
+                                </div>
+                                <br><br><br>
+                                <div id="btdiv" style="display: block;margin: 0 auto;margin-bottom: 20px;" align="center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ---------------------------------------新闻框----------------------------------------------- -->
+                <div id="notice-tab" class="tab-pane" style="margin-top: 20px;">
+                    <div>
+                        <div style="">
+                            <div class="row">
+                                <div style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);min-height: 300px;background-color:#fff;padding: 10px 10px;">
+                                    <div style="min-height: 470px; text-align: left; font-size: 18px;line-height: 24px;color: #737373;padding: 0px 20px 20px 20px;">
+                                        <ul id="notice" class="uls">
+                                        </ul>
+                                    </div>
+                                    <div style="text-align: center;font-size: 12px;" id="_page">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                <li><a id="first">首页</a></li>
+                                            </ul>
+                                            <ul class="pagination">
+                                                <li>
+                                                    <a aria-label="Previous" id="up">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li id="lp1" class="active"><a class="" id="p1" onclick="clicka(1)">1</a></li>
+                                                <li id="lp2"><a class="" id="p2" onclick="clicka(2)">2</a></li>
+                                                <li id="lp3"><a class="" id="p3" onclick="clicka(3)">3</a></li>
+                                                <li id="lp4"><a class="" id="p4" onclick="clicka(4)">4</a></li>
+                                                <li id="lp5"><a class="" id="p5" onclick="clicka(5)">5</a></li>
+                                                <li>
+                                                    <a aria-label="Next" id="down">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul class="pagination">
+                                                <li><a id="last">尾页</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ----------------------------------------------已报名队伍列表----------------------------------------------- -->
+                <div id="recruit-tab" class="tab-pane" style="margin-top: 20px;">
+                    <div>
+                        <div id="recruit" class="row">
+                            <div class="row" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);background-color: #fff;margin-right: 15px;margin-left: 15px;padding: 10px;">
+                                <span style="display: block; font-size: 18px;margin-bottom: 20px;">项目类型统计</span>
+                                <div class="table-responsive" style="overflow: auto;">
+                                    <table class="table table-striped table-bordered">
+                                        <tbody id="records_all">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="row" style="box-shadow: 0px 1px 3px rgba(34, 25, 25, 0.2);background-color: #fff;margin-right: 15px;margin-left: 15px;padding: 10px;">
+                                <span style="display: block; font-size: 18px;margin-bottom: 20px;">当前已报名队伍</span>
+                                <div class="table-responsive" style="overflow: auto;">
+                                    <table class="table table-striped table-bordered">
+                                        <tbody id="records">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ----------------------------------------------footer----------------------------------------------- -->
+    <footer></footer>
+    <script type="text/javascript" src="/js/footer.js"></script>
+    <script type="text/javascript">
+    var page_all = new Number();
+
+    function clicka(i) {
+        getnotice(Number($("#p" + i).text()));
+    }
+
+    function getnotice(p) {
+        // 设置分页
+        if (p > 3 && p < page_all - 1) {
+            for (var j = 1; j <= 5; j++) {
+                $("#p" + j).text(p + j - 3);
+            }
+        } else if (p <= 3 || (p == 4 && p > page_all - 1)) {
+            for (var j = 1; j <= 5; j++) {
+                $("#p" + j).text(j);
+            }
+        } else {
+            for (var j = 1; j <= 5; j++) {
+                $("#p" + j).text(page_all + j - 5);
+            }
+        }
+        // 设置激活
+        for (var j = 1; j <= 5; j++) {
+            $("#p" + j).text() == p ? $("#lp" + j).attr("class", "active") : $("#lp" + j).attr("class", "");
+        }
+        // 更新页面
+        $("#notice").empty();
+        $.ajax({
+            url: "?info=notice&page=" + p,
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                var ins;
+                for (i in returndata) {
+                    ins = '<li class="row">' +
+                        '<a class="col-md-10 col-sm-8" href="/notice/' + returndata[i].id + '"style="display: block;line-height: 16px;position: relative;" target="_blank">' +
+                        '<div class="words">' + returndata[i].title +
+                        '</div>' +
+                        '</a>' +
+                        '<p class="hidden-xs  col-md-2" style="float: right;color:#999;">' + returndata[i].date + '</p>' +
+                        '</li>'
+                    $("#notice").append(ins)
+                }
+            }
+        })
+    }
+    $(document).ready(function() {
+        var attend;
+
+        $.ajax({
+            url: "?info=attend",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (returndata == "0") {
+                    $("#btdiv").append('<button style="width: 150px;" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">报 名</button>');
+                } else {
+                    $("#btdiv").append('<a id="check"><button style="width: 200px;" type="button" class="btn btn-primary btn-lg">查看报名信息</button></a>');
+                    $("#check").attr("href", "/student/record/" + returndata);
+                }
+                if ($("#nav-identity").text() != "student")
+                    $("#btdiv").find("button").hide()
+            }
+        })
+        var count = [];
+        var max = [];
+        var category = [];
+        $.ajax({
+            url: "?info=competition",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (returndata == "该竞赛还不能报名！" || returndata == "该竞赛不存在！") {
+                    $("#btdiv").find("button").remove();
+                    $("#btdiv").append('<button style="width: 150px;" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" disabled>暂未发布</button>');
+                } else {
+                    document.title = returndata.name;
+                    $("#detail").text(returndata.name);
+                    for (var i in returndata.category) {
+                        count[i] = 0;
+                        max[i] = returndata.category[i].max;
+                        category[i] = returndata.category[i].name;
+                    }
+                    if (new Date(returndata.begin) > new Date()) {
+                        $("#btdiv").find("button").remove();
+                        $("#btdiv").append('<button style="width: 150px;" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" disabled>未到报名时间</button>')
+                    }
+                    if (new Date(returndata.end) < new Date()) {
+                        $("#btdiv").find("button").remove();
+                        $("#btdiv").append('<button style="width: 150px;" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" disabled>已过截止日期</button>')
+                    }
+
+                    $("#introduction").append(returndata.introduction);
+
+                    $("#title").append(returndata.version + returndata.name);
+
+                    $("#in").attr("href", "/competition/" + returndata._id + "/attend");
+
+                    if (returndata.attend == 0) {
+                        attend = 0;
+                        $("#attend").append("单人");
+                    } else {
+                        attend = 1;
+                        $("#attend").append("多人");
+                        $(".modal-body p").html("是否是队长？(只有队长可以报名)");
+                    }
+                    $("#beginend").append(returndata.begin + "至" + returndata.end);
+
+                    $("#sponsor").append(returndata.sponsor);
+                }
+            }
+        })
+
+        $.ajax({
+            url: "?info=noticepage",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                if (returndata.page != 0) {
+                    page_all = parseInt(returndata.page);
+                    for (var i = 5; i > page_all; i--) {
+                        $("#p" + i).remove();
+                    }
+                    getnotice(1);
+
+                } else {
+                    $("#notice").append('<span>暂无任何通知！</span>');
+                    $("#_page").remove()
+                }
+
+
+
+            }
+        })
+
+        $("#up").click(function() {
+            for (var j = 2; j <= 5; j++) {
+                if ($("#lp" + j).attr("class") == "active") {
+                    clicka(j - 1);
+                    return;
+                }
+            }
+        })
+        $("#down").click(function() {
+            for (var j = 1; j <= 4 && j < page_all; j++) {
+                if ($("#lp" + j).attr("class") == "active") {
+                    clicka(j + 1);
+                    return;
+                }
+            }
+        })
+        $("#first").click(function() {
+            getnotice(1);
+
+        })
+        $("#last").click(function() {
+            getnotice(page_all);
+        })
+
+        //动态添加已报名该竞赛的队伍列表
+        $.ajax({
+            url: "?info=recruit",
+            type: "GET",
+            async: false,
+            success: function(returndata) {
+                var status;
+                if (attend == 1) {
+                    var ins2 = '<tr><td>项目类别</td><td>队伍数(当前/最大)</td><tr>'
+                    var ins = '<tr>' +
+                        '<td>项目名称</td>' +
+                        '<td>项目类别</td>' +
+                        '<td>队长</td>' +
+                        '<td>联系方式</td>' +
+                        '<td>项目简介</td>' +
+                        '<td>招募条件</td>' + //增加招募条件condition
+                        '<td>队伍状态</td>' +
+                        '</tr>';
+                    for (var i in returndata) {
+                        if (returndata[i].recruit == true)
+                            status = "招募中"
+                        else
+                            status = "已招满"
+                        for (var j in category) {
+                            if (returndata[i].category == category[j]) { count[j]++ }
+                        }
+                        ins += '<tr>' +
+                            '<td title="' + returndata[i].item + '" style="word-wrap:break-word;white-space:normal;">' + returndata[i].item + '</td>' +
+                            '<td>' + returndata[i].category + '</td>' +
+                            '<td>' + returndata[i].captain + '</td>' +
+                            '<td>' + returndata[i].phone + '</td>' +
+                            '<td title="' + returndata[i].introduction + '" style="word-wrap:break-word;white-space:normal;">' + returndata[i].introduction + '</td>' +
+                            '<td title="' + returndata[i].condition + '" style="word-wrap:break-word;white-space:normal;">' + returndata[i].condition + '</td>' +
+                            '<td>' + status + '</td>' +
+                            '</tr>'
+                    }
+                    $("#records").append(ins)
+                    for (var j in category) {
+                        if (!max[j]) max[j] = '∞'
+                        ins2 += '<tr><td>' + category[j] + '</td><td>' + count[j] + '/' + max[j] + '</td><tr>'
+                    }
+
+                    $("#records_all").append(ins2)
+                } else {
+                    $("#recruit-tab").remove();
+                    $("#recruit-li").remove();
+                }
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>
